@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Caches
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.pyre/
+
+# Logs / runtime
+logs/
+*.log
+
+# Project outputs
+deliverable/
+NDM_CALIBRATOR_V1_0_FINAL.zip
+*.ndmc
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
