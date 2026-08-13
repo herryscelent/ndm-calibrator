@@ -22,6 +22,10 @@ from core.exceptions import SimulationError
 
 _METHODS = ("RK45", "DOP853", "Radau", "BDF")
 
+# States above this magnitude are treated as diverged (explosion). Chosen well
+# above any physically meaningful signal level but far below float overflow.
+_DIVERGENCE_LIMIT = 1e20
+
 
 @dataclass
 class ODESolverConfig:
@@ -75,13 +79,12 @@ def solve_ode(
     if t.size == 0 or y.size == 0:
         return t, y, False, "积分返回空结果"
 
-    if not result.success:
-        # solve_ivp returns partial trajectory; we mark the run as failed.
-        if np.any(~np.isfinite(y)):
-            return t, y, False, "状态发散(NaN/Inf), 请检查参数与模型"
-        return t, y, False, f"积分器提前终止: {result.message}"
+    # Guard against divergence: NaN/Inf, or values exploding to an enormous
+    # but still finite magnitude that would destroy the fit objective.
+    if np.any(~np.isfinite(y)) or np.any(np.abs(y) > _DIVERGENCE_LIMIT):
+        return t, y, False, "状态发散(NaN/Inf/爆炸), 请检查参数与模型"
 
-    if np.any(~np.isfinite(y)):
-        return t, y, False, "状态发散(NaN/Inf), 请检查参数与模型"
+    if not result.success:
+        return t, y, False, f"积分器提前终止: {result.message}"
 
     return t, y, True, "OK"

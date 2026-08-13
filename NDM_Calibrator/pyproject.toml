@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "NDM-Calibrator"
+version = "1.0.0"
+description = "非线性动态模型参数辨识与校准软件 (Nonlinear Dynamic Model parameter identification and calibration)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pandas>=2.0",
+    "sympy>=1.11",
+    "matplotlib>=3.7",
+    "openpyxl>=3.1",
+    "PySide6>=6.6",
+    "pyqtgraph>=0.13",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.4"]
+
+[tool.setuptools]
+packages = ["app", "core", "data", "simulation", "identification", "diagnostics", "uncertainty", "visualization", "export", "ui"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

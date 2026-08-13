@@ -396,9 +396,11 @@ class MainWindow(QMainWindow):
 
     def _after_project_change(self) -> None:
         self._sync_top_bar()
-        current = self.stack.currentWidget()
-        if hasattr(current, "on_project_changed"):
-            current.on_project_changed()
+        # Refresh every page so results/state stay in sync regardless of which
+        # page is currently visible.
+        for page in self.pages.values():
+            if hasattr(page, "on_project_changed"):
+                page.on_project_changed()
 
     def _sync_top_bar(self) -> None:
         project = self.app.project

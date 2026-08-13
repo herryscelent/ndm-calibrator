@@ -1,0 +1,13 @@
+# NDM-Calibrator runtime dependencies
+# Version ranges are pinned for reproducibility (V1.0)
+numpy>=1.24,<3
+scipy>=1.10,<2
+pandas>=2.0,<3
+sympy>=1.11,<2
+matplotlib>=3.7,<4
+openpyxl>=3.1,<4
+PySide6>=6.6,<7
+pyqtgraph>=0.13,<1
+
+# Development / test
+pytest>=7.4,<9

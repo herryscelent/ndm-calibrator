@@ -43,22 +43,24 @@ class ParameterPage(BasePage):
         self.table_widget.changed.connect(self.parameters_changed)
 
     def _sync_from_model(self) -> None:
-        app = self.window().app
+        window = self.window()
+        app = window.app
         if app is None:
             return
         try:
-            app.sync_parameters_from_model()
+            window.sync_parameters_from_model()
             self.table_widget.set_parameters(app.project.parameters)
             self.badge.set_status("info", "已同步")
         except NDMCError as exc:
             self.badge.set_status("error", str(exc))
 
     def _validate(self) -> None:
-        app = self.window().app
+        window = self.window()
+        app = window.app
         if app is None:
             return
         try:
-            errors = app.validate_parameters()
+            errors = window.validate_parameters()
             if errors:
                 self.badge.set_status("error", "参数无效")
             else:

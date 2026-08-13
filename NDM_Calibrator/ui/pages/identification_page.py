@@ -148,16 +148,16 @@ class IdentificationPage(BasePage):
 
     # ------------------------------------------------------------------ #
     def start(self) -> None:
-        app = self.window().app
+        window = self.window()
+        app = window.app
         if app is None:
             return
-        from ui.workers import RunWorker
 
         algo = self.current_algorithm()
         options = self._collect_options()
         try:
             options["seed"] = None
-            worker = app.run_identification_async(algo, options)
+            worker = window.run_identification_async(algo, options)
         except NDMCError as exc:
             self.badge.set_status("error", str(exc))
             return
