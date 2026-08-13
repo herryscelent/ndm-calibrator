@@ -88,7 +88,6 @@ def evaluate_objective(
     if not np.all(valid):
         raise ObjectiveError("目标函数包含非有限值")
 
-    n = diff.size
     if config.type == "sse":
         return float(np.sum(diff**2))
     if config.type == "mse":

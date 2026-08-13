@@ -42,7 +42,7 @@ _ALLOWED_FUNCTIONS = {
 # Simple regex to find candidate tokens for blacklist checking.
 _TOKEN_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
-_DX_PREFIX = "dx"
+_DFDT_SUFFIX = "/dt"
 
 
 @dataclass
@@ -243,7 +243,7 @@ class DynamicModel:
 
         rhs_exprs: List[str] = []
         for st in states:
-            key = f"{_DX_PREFIX}{st}/dt"
+            key = f"d{st}{_DFDT_SUFFIX}"
             if key not in dynamics:
                 raise ModelParseError(f"缺少状态 {st} 的动态方程 {key}")
             rhs_exprs.append(dynamics[key])
@@ -414,7 +414,7 @@ class DynamicModel:
             "states": self.states,
             "inputs": self.inputs,
             "parameters": self.parameters,
-            "dynamics": {f"dx{st}/dt": expr for st, expr in zip(self.states, self.rhs_exprs)},
+            "dynamics": {f"d{st}{_DFDT_SUFFIX}": expr for st, expr in zip(self.states, self.rhs_exprs)},
             "outputs": self.outputs,
             "output_equations": dict(zip(self.outputs, self.output_exprs)),
             "initial_conditions": {k: float(v) for k, v in self.initial_conditions.items()},
