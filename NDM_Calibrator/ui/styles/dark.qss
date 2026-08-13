@@ -1,0 +1,33 @@
+/* Dark theme overrides. */
+
+QLineEdit, QDoubleSpinBox, QSpinBox, QComboBox {
+    background: @input_bg;
+    border: 1px solid @border;
+    color: @text;
+}
+
+QLineEdit:focus, QDoubleSpinBox:focus, QComboBox:focus {
+    border: 1px solid @focus;
+}
+
+QComboBox QAbstractItemView {
+    background: @surface;
+    border: 1px solid @border_strong;
+}
+
+QToolTip {
+    background-color: @tooltip;
+    color: @bg;
+}
+
+QTableView {
+    background: @surface;
+    alternate-background-color: @surface2;
+    gridline-color: @border;
+}
+
+QHeaderView::section {
+    background: @surface2;
+    color: @text2;
+    border-bottom: 1px solid @border;
+}

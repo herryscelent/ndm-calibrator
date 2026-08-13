@@ -1,0 +1,242 @@
+/* ============================================================
+   Base QSS — shared structural styles, independent of theme.
+   The __TOKENS__ marker is replaced at runtime by ThemeManager
+   with theme-specific color values.
+   ============================================================ */
+
+* {
+    font-family: "Segoe UI";
+    font-size: 13px;
+    outline: none;
+}
+
+QMainWindow {
+    background: @bg;
+}
+
+QWidget {
+    color: @text;
+}
+
+/* ---------- Top bar ---------- */
+#TopBar {
+    background: @surface;
+    border-bottom: 1px solid @border;
+    min-height: 47px;
+}
+
+#AppTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: @text;
+}
+
+#ProjectName {
+    font-size: 12px;
+    color: @text2;
+}
+
+#DirtyIndicator {
+    font-size: 11px;
+    color: @warning;
+}
+
+/* ---------- Sidebar ---------- */
+#Sidebar {
+    background: @surface;
+    border-right: 1px solid @border;
+}
+
+#SidebarNavButton {
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding-left: 14px;
+    padding-right: 8px;
+    min-height: 38px;
+    border-radius: 6px;
+    margin: 1px 8px;
+    color: @text2;
+    font-size: 13px;
+}
+
+#SidebarNavButton:hover {
+    background: @hover;
+    color: @text;
+}
+
+#SidebarNavButton:checked {
+    background: @selection;
+    color: @text;
+}
+
+#SidebarNavButton:checked QLabel {
+    color: @text;
+}
+
+#SidebarSectionLabel {
+    color: @disabled;
+    font-size: 11px;
+    margin: 8px 14px 2px 14px;
+}
+
+/* ---------- Page header ---------- */
+#PageTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: @text;
+}
+
+#PageSubtitle {
+    font-size: 12px;
+    color: @text2;
+}
+
+/* ---------- Metric cards ---------- */
+QFrame#MetricCard {
+    background: @surface;
+    border: 1px solid @border;
+    border-radius: 8px;
+}
+
+QLabel#MetricLabel {
+    color: @text2;
+    font-size: 12px;
+}
+
+QLabel#MetricValue {
+    font-size: 24px;
+    font-weight: 600;
+    color: @text;
+}
+
+/* ---------- Sections / panels ---------- */
+QFrame#SectionPanel {
+    background: @surface;
+    border: 1px solid @border;
+    border-radius: 8px;
+}
+
+QLabel#SectionTitle {
+    font-size: 15px;
+    font-weight: 600;
+    color: @text;
+}
+
+QFrame#Divider {
+    background: @border;
+    max-height: 1px;
+}
+
+/* ---------- Status bar ---------- */
+QStatusBar {
+    background: @surface;
+    color: @text2;
+    border-top: 1px solid @border;
+}
+
+QStatusBar::item {
+    border: none;
+}
+
+/* ---------- Scrollbars ---------- */
+QScrollBar:vertical {
+    background: transparent;
+    width: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:vertical {
+    background: @border_strong;
+    border-radius: 5px;
+    min-height: 24px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: @text_disabled;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0;
+}
+
+QScrollBar:horizontal {
+    background: transparent;
+    height: 10px;
+    margin: 0;
+}
+
+QScrollBar::handle:horizontal {
+    background: @border_strong;
+    border-radius: 5px;
+    min-width: 24px;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    width: 0;
+}
+
+/* ---------- Tooltip ---------- */
+QToolTip {
+    background-color: @tooltip;
+    color: @bg;
+    border: 1px solid @border_strong;
+    padding: 6px 8px;
+    border-radius: 4px;
+}
+
+/* ---------- QToolBar buttons ---------- */
+QToolButton#IconButton {
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    padding: 4px;
+    min-width: 30px;
+    min-height: 30px;
+}
+
+QToolButton#IconButton:hover {
+    background: @hover;
+}
+
+QToolButton#IconButton:pressed {
+    background: @selection;
+}
+
+/* ---------- Tabs ---------- */
+QTabWidget::pane {
+    border: 1px solid @border;
+    border-radius: 8px;
+    background: @surface;
+    top: -1px;
+}
+
+QTabBar::tab {
+    background: transparent;
+    color: @text2;
+    padding: 7px 16px;
+    border: none;
+    border-bottom: 2px solid transparent;
+}
+
+QTabBar::tab:hover {
+    color: @text;
+}
+
+QTabBar::tab:selected {
+    color: @accent;
+    border-bottom: 2px solid @accent;
+}
+
+/* ---------- Splitter ---------- */
+QSplitter::handle {
+    background: @border;
+}
+
+QSplitter::handle:horizontal {
+    width: 2px;
+}
+
+QSplitter::handle:vertical {
+    height: 2px;
+}

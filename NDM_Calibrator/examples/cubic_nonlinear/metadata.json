@@ -1,0 +1,26 @@
+{
+  "name": "cubic_nonlinear",
+  "model": "cubic_nonlinear",
+  "true_parameters": {
+    "a": 0.5,
+    "b": 0.8,
+    "c": 1.2
+  },
+  "noise_std": 0.02,
+  "seed": 103,
+  "recommended_algorithm": "differential_evolution",
+  "expected_range": {
+    "a": [
+      0.3,
+      0.7
+    ],
+    "b": [
+      0.5,
+      1.1
+    ],
+    "c": [
+      0.9,
+      1.5
+    ]
+  }
+}

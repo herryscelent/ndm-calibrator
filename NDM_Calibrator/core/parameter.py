@@ -6,7 +6,7 @@ status (free to be identified, or fixed at its initial value).
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict
 
 from app.constants import PARAMETER_BOUND_DEFAULT_LOWER, PARAMETER_BOUND_DEFAULT_UPPER, PARAMETER_INITIAL_DEFAULT

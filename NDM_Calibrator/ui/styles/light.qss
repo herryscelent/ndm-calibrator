@@ -1,0 +1,6 @@
+/* Light theme is mostly carried by the base + forms/tables QSS.
+   Kept as a thin placeholder so theme switching stays symmetric. */
+
+QTableView {
+    background: @surface;
+}

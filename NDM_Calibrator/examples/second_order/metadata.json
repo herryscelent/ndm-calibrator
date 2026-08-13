@@ -1,0 +1,24 @@
+{
+  "name": "second_order",
+  "model": "second_order",
+  "true_parameters": {
+    "k": 30.0,
+    "c": 2.0
+  },
+  "fixed_parameters": {
+    "m": 1.0
+  },
+  "noise_std": 0.03,
+  "seed": 102,
+  "recommended_algorithm": "least_squares",
+  "expected_range": {
+    "k": [
+      25,
+      35
+    ],
+    "c": [
+      1.2,
+      2.8
+    ]
+  }
+}

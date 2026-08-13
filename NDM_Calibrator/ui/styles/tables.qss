@@ -1,0 +1,37 @@
+/* Table styles shared by data preview and parameter tables. */
+
+QTableView {
+    background: @surface;
+    alternate-background-color: @surface2;
+    border: 1px solid @border;
+    border-radius: 8px;
+    gridline-color: @border;
+    selection-background-color: @selection;
+    selection-color: @text;
+}
+
+QTableView::item {
+    padding: 2px 8px;
+}
+
+QTableView::item:hover {
+    background: @hover;
+}
+
+QHeaderView::section {
+    background: @surface2;
+    color: @text2;
+    border: none;
+    border-bottom: 1px solid @border;
+    padding: 6px 8px;
+    font-weight: 600;
+}
+
+QHeaderView::section:first {
+    border-top-left-radius: 8px;
+}
+
+QTableCornerButton::section {
+    background: @surface2;
+    border: none;
+}

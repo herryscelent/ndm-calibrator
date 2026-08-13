@@ -1,0 +1,80 @@
+/* Light theme overrides. Colors come from theme tokens (replaced at runtime). */
+
+QLineEdit, QDoubleSpinBox, QSpinBox, QComboBox {
+    background: @input_bg;
+    border: 1px solid @border;
+    border-radius: 6px;
+    padding: 4px 8px;
+    min-height: 22px;
+    selection-background-color: @selection;
+}
+
+QLineEdit:focus, QDoubleSpinBox:focus, QSpinBox:focus, QComboBox:focus {
+    border: 1px solid @focus;
+}
+
+QLineEdit:disabled, QDoubleSpinBox:disabled, QComboBox:disabled {
+    color: @disabled;
+    background: @surface2;
+}
+
+QComboBox::drop-down {
+    border: none;
+    width: 22px;
+}
+
+QComboBox QAbstractItemView {
+    background: @surface;
+    border: 1px solid @border;
+    selection-background-color: @selection;
+    selection-color: @text;
+}
+
+QPushButton {
+    background: @surface_secondary;
+    border: 1px solid @border;
+    border-radius: 6px;
+    padding: 5px 14px;
+    min-height: 22px;
+    color: @text;
+}
+
+QPushButton:hover {
+    background: @hover;
+    border-color: @border_strong;
+}
+
+QPushButton:pressed {
+    background: @selection;
+}
+
+QPushButton#PrimaryButton {
+    background: @accent;
+    color: @accent_text;
+    border: none;
+    font-weight: 600;
+}
+
+QPushButton#PrimaryButton:hover {
+    background: @accent_hover;
+}
+
+QPushButton#PrimaryButton:pressed {
+    background: @accent_pressed;
+}
+
+QPushButton#DangerButton {
+    background: transparent;
+    color: @danger;
+    border: 1px solid @danger;
+}
+
+QPushButton#DangerButton:hover {
+    background: rgba(207, 34, 46, 0.08);
+}
+
+QPushButton:disabled {
+    color: @disabled;
+    background: @surface2;
+    border-color: @border;
+}
