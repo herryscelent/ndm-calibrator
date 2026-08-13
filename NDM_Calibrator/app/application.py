@@ -153,18 +153,21 @@ def _require_project_state(project: Project):
 
 
 def run_identification_for_project(project: Project, algorithm: str, options: Dict[str, Any]) -> Dict[str, Any]:
-    """Run identification and store the result on the project."""
+    """Run identification, store the run in history and set it as current."""
     from identification.manager import run_algorithm
 
     free_params = _require_project_state(project)
     result = run_algorithm(project, algorithm, options)
-    project.results["identification"] = {
+    history = project.results.setdefault("identification_history", [])
+    entry = {
         "algorithm": algorithm,
         "options": options,
-        "result": result,
+        "result": result.to_dict(),
     }
+    history.append(entry)
+    project.results["identification"] = entry  # current scheme
     project.mark_dirty()
-    return result
+    return result.to_dict()
 
 
 def run_bootstrap_for_project(project: Project, options: Dict[str, Any]) -> Dict[str, Any]:
