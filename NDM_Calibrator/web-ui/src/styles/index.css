@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+/* ================================================================
+   NDM-Calibrator Web UI — Design Tokens (Light Theme)
+   These tokens are the single source of truth for the visual system.
+   See docs/UI_DESIGN_SYSTEM.md for the full reference.
+   ================================================================ */
+
+@theme {
+  /* --- Colors --- */
+  --color-background: #f5f7fa;
+  --color-sidebar: #f1f4f8;
+  --color-topbar: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #f8fafc;
+  --color-surface-hover: #edf2f7;
+  --color-surface-selected: #e8f1ff;
+
+  --color-border: #dde3ea;
+  --color-border-strong: #c9d2dc;
+
+  --color-text-primary: #20252b;
+  --color-text-secondary: #687482;
+  --color-text-muted: #929caa;
+  --color-text-disabled: #b4bcc5;
+
+  --color-accent: #356fe5;
+  --color-accent-hover: #285fcb;
+  --color-accent-subtle: #e7f0ff;
+
+  --color-success: #27875a;
+  --color-warning: #b7791f;
+  --color-danger: #c94a4a;
+  --color-info: #356fe5;
+
+  /* --- Chart series --- */
+  --color-chart-measured: #356fe5;
+  --color-chart-simulated: #c0613f;
+  --color-chart-residual: #b7791f;
+  --color-chart-sensitivity: #687482;
+  --color-chart-bootstrap: #27875a;
+  --color-chart-grid: #e6ebf1;
+
+  /* --- Spacing (base 4) --- */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+
+  /* --- Radius --- */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+
+  /* --- Typography --- */
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Cascadia Mono", "Consolas", monospace;
+
+  /* --- Layout --- */
+  --layout-topbar-h: 48px;
+  --layout-sidebar-w: 220px;
+  --layout-sidebar-w-collapsed: 68px;
+  --layout-page-pad: 28px;
+}
+
+/* ---------- Base ---------- */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-background text-text-primary;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-disabled);
+}
+
+/* ---------- Utility helpers ---------- */
+@utility text-tabular {
+  font-variant-numeric: tabular-nums;
+}
