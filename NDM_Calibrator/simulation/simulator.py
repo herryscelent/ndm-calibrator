@@ -50,6 +50,16 @@ class Simulator:
         """
         _check_parameter_completeness(self.model, parameters)
 
+        t_eval = np.asarray(experiment.time, dtype=float)
+        if t_eval.ndim != 1 or t_eval.size == 0:
+            raise SimulationError("实验时间序列为空或不是一维数组")
+        if not np.all(np.isfinite(t_eval)):
+            raise SimulationError("实验时间序列包含非有限值")
+        # solve_ivp requires strictly increasing t_eval.  Failing early gives
+        # callers a domain error instead of an opaque integrator exception.
+        if t_eval.size > 1 and np.any(np.diff(t_eval) <= 0):
+            raise SimulationError("实验时间必须严格单调递增且不能重复")
+
         x0 = self._initial_state(initial_conditions)
         u_interp = self._build_input_callables(experiment, input_interpolation)
         rhs = _compile_rhs(self.model, parameters)
@@ -58,15 +68,14 @@ class Simulator:
             u_vals = np.array(
                 [u_interp[name](t) for name in self.model.inputs], dtype=float
             ) if self.model.inputs else np.array([])
-            return rhs(x, u_vals)
+            return rhs(t, x, u_vals)
 
-        t_eval = experiment.time
         t_span = (float(t_eval[0]), float(t_eval[-1]))
         t, X, success, message = solve_ode(_rhs, x0, t_span, t_eval=t_eval, config=self.solver_config)
         if not success:
             return SimulationResult(t=t, states=X, outputs={}, success=False, message=message)
 
-        outputs = self._evaluate_outputs(X, parameters, experiment)
+        outputs = self._evaluate_outputs(X, parameters, experiment, input_interpolation)
         return SimulationResult(t=t, states=X, outputs=outputs, success=True, message=message)
 
     # ------------------------------------------------------------------ #
@@ -103,8 +112,11 @@ class Simulator:
             callables[name] = _make(t_src, u_src, interpolation)
         return callables
 
-    def _evaluate_outputs(self, X, parameters, experiment) -> Dict[str, np.ndarray]:
-        u_interp = self._build_input_callables(experiment, "linear")
+    def _evaluate_outputs(self, X, parameters, experiment, input_interpolation: str = "linear") -> Dict[str, np.ndarray]:
+        # Output equations may reference inputs directly.  Use the same
+        # interpolation mode as the ODE RHS so the reported prediction is
+        # consistent with the trajectory that was integrated.
+        u_interp = self._build_input_callables(experiment, input_interpolation)
         output_func = _compile_outputs(self.model, parameters)
         n = X.shape[0]
         result: Dict[str, np.ndarray] = {
@@ -114,7 +126,7 @@ class Simulator:
             u_vals = {
                 name: interp(t) for name, interp in u_interp.items()
             } if self.model.inputs else {}
-            values = output_func(X[i], u_vals)
+            values = output_func(float(t), X[i], u_vals)
             for name in self.model.outputs:
                 result[name][i] = values[name]
         return result
@@ -128,10 +140,12 @@ def _compile_rhs(model: DynamicModel, parameters: Dict[str, float]):
     substituted = Matrix(model._parsed_rhs).xreplace(
         {param_syms[p]: float(parameters[p]) for p in model.parameters}
     )
-    func = lambdify((state_syms, u_syms), substituted, modules="numpy")
+    # Include time explicitly: custom models may legally reference ``t``.
+    from core.model_definition import _TIME_SYMBOL
+    func = lambdify((_TIME_SYMBOL, state_syms, u_syms), substituted, modules="numpy")
 
-    def rhs(x: np.ndarray, u_vals: np.ndarray) -> np.ndarray:
-        return np.asarray(func(x, u_vals), dtype=float).reshape(-1)
+    def rhs(t: float, x: np.ndarray, u_vals: np.ndarray) -> np.ndarray:
+        return np.asarray(func(t, x, u_vals), dtype=float).reshape(-1)
 
     return rhs
 
@@ -141,20 +155,21 @@ def _compile_outputs(model: DynamicModel, parameters: Dict[str, float]):
     state_syms = [model._symbols["states"][s] for s in model.states]
     u_syms = [model._symbols["inputs"][s] for s in model.inputs]
     param_syms = model._symbols["parameters"]
+    from core.model_definition import _TIME_SYMBOL
     funcs = {}
     for name in model.outputs:
         expr = model._parsed_outputs[name].xreplace(
             {param_syms[p]: float(parameters[p]) for p in model.parameters}
         )
-        funcs[name] = lambdify((state_syms, u_syms), expr, modules="numpy")
+        funcs[name] = lambdify((_TIME_SYMBOL, state_syms, u_syms), expr, modules="numpy")
 
-    def _call(x: np.ndarray, u_by_name: Dict[str, float]) -> Dict[str, float]:
+    def _call(t: float, x: np.ndarray, u_by_name: Dict[str, float]) -> Dict[str, float]:
         u_vals = np.array(
             [u_by_name[name] for name in model.inputs], dtype=float
         ) if model.inputs else np.array([])
         out = {}
         for name in model.outputs:
-            out[name] = float(np.asarray(funcs[name](x, u_vals), dtype=float).item())
+            out[name] = float(np.asarray(funcs[name](t, x, u_vals), dtype=float).item())
         return out
 
     return _call
@@ -164,3 +179,14 @@ def _check_parameter_completeness(model: DynamicModel, parameters: Dict[str, flo
     missing = [p for p in model.parameters if p not in parameters]
     if missing:
         raise SimulationError(f"缺少模型参数值: {missing}")
+    invalid = []
+    for name in model.parameters:
+        try:
+            value = float(parameters[name])
+        except (TypeError, ValueError):
+            invalid.append(f"{name}={parameters[name]!r}")
+            continue
+        if not np.isfinite(value):
+            invalid.append(f"{name}={parameters[name]!r}")
+    if invalid:
+        raise SimulationError(f"模型参数必须是有限数值: {', '.join(invalid)}")

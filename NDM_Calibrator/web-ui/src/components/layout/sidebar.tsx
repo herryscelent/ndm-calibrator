@@ -111,7 +111,7 @@ export function Sidebar({
           onClick={onToggleCollapse}
           title={collapsed ? "展开侧边栏" : "折叠侧边栏"}
           className={cn(
-            "flex w-full items-center gap-3 rounded-[6px] px-3 py-2 text-[13px] text-text-secondary transition-colors hover:bg-surface-hover",
+            "flex w-full items-center gap-3 rounded-[6px] px-3 py-2 text-[13px] text-text-secondary transition-colors hover:bg-surface-hover max-[767px]:hidden",
             collapsed && "justify-center px-0"
           )}
         >

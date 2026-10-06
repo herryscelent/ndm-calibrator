@@ -12,7 +12,7 @@ from typing import Any, Dict, List
 import numpy as np
 
 from core.exceptions import NDMCError
-from identification.base import build_context, bounds_and_initial
+from identification.base import build_context, bounds_and_initial, check_cancelled
 from identification.multistart import generate_initial_guesses, run_multistart
 from app.constants import STABILITY_CV_HIGH_THRESHOLD
 
@@ -27,6 +27,7 @@ def run_multistart_stability(project, options: Dict[str, Any]) -> Dict[str, Any]
     Reuses the stored multistart run when available and compatible; otherwise
     runs it fresh.
     """
+    check_cancelled(options)
     free_names = [p.name for p in project.parameters.free_parameters()]
 
     stored = project.results.get("identification_history", [])
@@ -41,13 +42,22 @@ def run_multistart_stability(project, options: Dict[str, Any]) -> Dict[str, Any]
         # Run it on demand.
         ctx = build_context(project)
         lower, upper, x0 = bounds_and_initial(project)
-        n_starts = int(options.get("n_starts", 10))
+        try:
+            n_starts = int(options.get("n_starts", 10))
+        except (TypeError, ValueError) as exc:
+            raise StabilityError("多起点数量必须是正整数") from exc
+        if n_starts < 1:
+            raise StabilityError("多起点数量必须 >= 1")
         seed = options.get("seed", 0)
         from identification.manager import run_algorithm
-        r = run_algorithm(project, "multistart", {"n_starts": n_starts, "seed": seed})
+        run_options = {"n_starts": n_starts, "seed": seed}
+        if options.get("_cancel_token") is not None:
+            run_options["_cancel_token"] = options["_cancel_token"]
+        r = run_algorithm(project, "multistart", run_options)
         result = r.to_dict() if hasattr(r, "to_dict") else r
 
     all_solutions = result.get("extra", {}).get("all_solutions", [])
+    check_cancelled(options)
     feasible = [s for s in all_solutions if s.get("theta") is not None and np.isfinite(s.get("objective", np.inf))]
     if not feasible:
         raise StabilityError("没有可用的多起点结果")

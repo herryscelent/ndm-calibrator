@@ -55,6 +55,10 @@ def run_calibration_and_diagnostics(project, parameter_values: Dict[str, float])
     result = {
         "parameter_values": {k: float(v) for k, v in parameter_values.items()},
         "metrics": metrics,
+        # Keep the simulated series with the calibration artifact so the
+        # dashboard and export pages can render exactly the values used for
+        # the reported metrics without running another simulation.
+        "predicted": {k: np.asarray(v, dtype=float).tolist() for k, v in predicted.items()},
         "residuals": {k: v.tolist() for k, v in residuals.items()},
         "residual_stats": residual_stats,
         "residual_diagnosis": residual_diagnosis,

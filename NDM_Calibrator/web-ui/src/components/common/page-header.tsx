@@ -9,7 +9,7 @@ interface PageHeaderProps {
 /** Standard page header: title + one-line description + optional actions. */
 export function PageHeader({ title, description, actions }: PageHeaderProps) {
   return (
-    <div className="mb-6 flex items-start justify-between gap-4">
+    <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
       <div>
         <h1 className="text-[22px] font-semibold leading-tight text-text-primary">
           {title}
@@ -18,7 +18,7 @@ export function PageHeader({ title, description, actions }: PageHeaderProps) {
           <p className="mt-1 text-[13px] text-text-secondary">{description}</p>
         ) : null}
       </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+      {actions ? <div className="flex max-w-full shrink-0 flex-wrap items-center gap-2">{actions}</div> : null}
     </div>
   );
 }

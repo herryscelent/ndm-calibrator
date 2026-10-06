@@ -9,7 +9,7 @@
 | App shell (flex column) | `QMainWindow` + `QVBoxLayout` | 顶栏 + 中区 |
 | Topbar | `QWidget` (fixed 48px) | 背景 `#FFFFFF`, 底边框 |
 | Sidebar | `QWidget` + `QVBoxLayout` | 宽 220/68px, 背景 `#F1F4F8` |
-| Sidebar 折叠 | `setFixedWidth()` + 动画 | 160ms 过渡 |
+| Sidebar 折叠 | `setFixedWidth()` | Qt Mock 中即时切换 220/68px；Web 原型为 160ms 过渡 |
 | Main content (overflow-y) | `QScrollArea` | padding 28px |
 | Page stack | `QStackedWidget` | 页面切换 |
 
@@ -73,7 +73,7 @@
 
 ## 交互行为
 
-- 侧边栏折叠保存到用户设置 (QSettings)；
-- 图表主题随 Light/Dark 切换；
-- 长任务在 `QThread` 运行, UI 不冻结；
+- 侧边栏折叠状态仅保留在当前进程会话内；本阶段不使用 `QSettings` 持久化；
+- 当前迁移固定为 Light 主题；不提供 Light/Dark 切换，图表也不切换主题；
+- 参数辨识使用 UI 线程上的 `QTimer` 驱动确定性 Mock 状态（Ready → Running → Completed），不使用 `QThread`，也不接入真实后端；
 - 状态用 Badge 语义色, 不依赖单一颜色。

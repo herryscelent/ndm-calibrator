@@ -12,7 +12,7 @@ export function MetricCard({ label, value, sub, className }: MetricCardProps) {
   return (
     <div
       className={cn(
-        "flex min-w-[140px] flex-col gap-0.5 rounded-lg border border-border bg-surface px-4 py-3",
+        "flex min-w-0 flex-col gap-0.5 rounded-lg border border-border bg-surface px-4 py-3 sm:min-w-[140px]",
         className
       )}
     >

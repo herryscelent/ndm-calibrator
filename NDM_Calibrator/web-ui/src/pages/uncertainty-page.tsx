@@ -30,23 +30,23 @@ export function UncertaintyPage({ onToast }: { onToast: (msg: string) => void })
 
       <Tabs defaultValue="multistart">
         <TabsList>
-          <TabsTrigger value="multistart">Multi-start</TabsTrigger>
+          <TabsTrigger value="multistart">多起点分析</TabsTrigger>
           <TabsTrigger value="bootstrap">Bootstrap</TabsTrigger>
         </TabsList>
 
         {/* ---------------- Multi-start ---------------- */}
         <TabsContent value="multistart">
           <div className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
-            <MetricCard label="Starts" value={String(multistart.starts)} />
-            <MetricCard label="Successful" value={String(multistart.successful)} />
-            <MetricCard label="Success rate" value={multistart.successRate} />
-            <MetricCard label="Best RMSE" value={multistart.bestRMSE.toFixed(4)} />
+            <MetricCard label="起点数" value={String(multistart.starts)} />
+            <MetricCard label="成功次数" value={String(multistart.successful)} />
+            <MetricCard label="成功率" value={multistart.successRate} />
+            <MetricCard label="最佳 RMSE" value={multistart.bestRMSE.toFixed(4)} />
           </div>
 
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
             <div className="rounded-lg border border-border bg-surface p-5">
               <h3 className="mb-3 text-[15px] font-semibold text-text-primary">
-                Parameter distribution (multi-start)
+                参数分布（多起点）
               </h3>
               <div className="h-[260px]">
                 <ResponsiveContainer width="100%" height="100%">
@@ -64,11 +64,11 @@ export function UncertaintyPage({ onToast }: { onToast: (msg: string) => void })
 
             <div>
               <h3 className="mb-3 text-[15px] font-semibold text-text-primary">运行结果</h3>
-              <div className="overflow-hidden rounded-lg border border-border">
-                <table className="w-full text-[13px]">
+              <div className="overflow-x-auto rounded-lg border border-border">
+                <table className="w-full min-w-[320px] text-[13px]">
                   <thead>
                     <tr className="border-b border-border bg-surface-secondary">
-                      {["Start", "k", "c"].map((h) => (
+                      {["起点", "k", "c"].map((h) => (
                         <th key={h} className="px-4 py-2 text-left font-medium text-text-secondary">{h}</th>
                       ))}
                     </tr>
@@ -90,17 +90,17 @@ export function UncertaintyPage({ onToast }: { onToast: (msg: string) => void })
 
         {/* ---------------- Bootstrap ---------------- */}
         <TabsContent value="bootstrap">
-          <div className="mb-5 flex items-center gap-3">
-            <MetricCard label="Bootstrap samples" value={String(bootstrap.samples)} />
-            <MetricCard label="Seed" value={String(bootstrap.seed)} />
-            <MetricCard label="Status" value={bootstrap.status} />
+          <div className="mb-5 grid grid-cols-2 gap-3 sm:flex sm:items-center">
+            <MetricCard label="Bootstrap 样本数" value={String(bootstrap.samples)} />
+            <MetricCard label="随机种子" value={String(bootstrap.seed)} />
+            <MetricCard label="状态" value="已完成" />
           </div>
 
-          <div className="mb-5 overflow-hidden rounded-lg border border-border">
-            <table className="w-full text-[13px]">
+          <div className="mb-5 overflow-x-auto rounded-lg border border-border">
+            <table className="w-full min-w-[560px] text-[13px]">
               <thead>
                 <tr className="border-b border-border bg-surface-secondary">
-                  {["Parameter", "Estimate", "Median", "P2.5", "P97.5"].map((h) => (
+                  {["参数", "估计值", "中位数", "P2.5", "P97.5"].map((h) => (
                     <th key={h} className="px-4 py-2 text-left font-medium text-text-secondary">{h}</th>
                   ))}
                 </tr>
@@ -130,20 +130,20 @@ export function UncertaintyPage({ onToast }: { onToast: (msg: string) => void })
                 <SelectItem value="c">c</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant="secondary" size="sm" onClick={() => onToast("Bootstrap re-run (mock)")}>
+            <Button variant="secondary" size="sm" onClick={() => onToast("Bootstrap 已重新运行（演示）")}>
               重新运行
             </Button>
           </div>
 
           <div className="mt-4 rounded-lg border border-border bg-surface p-5">
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <h3 className="text-[15px] font-semibold text-text-primary">
-                Bootstrap distribution · {selParam}
+                Bootstrap 参数分布 · {selParam}
               </h3>
               <div className="flex items-center gap-2 text-xs text-text-muted">
-                <span className="text-tabular">median {dist.median.toFixed(3)}</span>
+                <span className="text-tabular">中位数 {dist.median.toFixed(3)}</span>
                 <span className="text-tabular">[{dist.lo.toFixed(2)}, {dist.hi.toFixed(2)}]</span>
-                <Badge variant="info">95% percentile interval</Badge>
+                <Badge variant="info">95% 百分位区间</Badge>
               </div>
             </div>
             <div className="h-[240px]">
@@ -153,7 +153,7 @@ export function UncertaintyPage({ onToast }: { onToast: (msg: string) => void })
                   <XAxis dataKey="bin" tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} />
                   <YAxis tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} width={36} />
                   <Tooltip content={<ChartTooltip />} />
-                  <Bar dataKey="count" name="Count" fill={chartColors.bootstrap} radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="count" name="频数" fill={chartColors.bootstrap} radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

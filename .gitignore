@@ -26,6 +26,25 @@ deliverable/
 NDM_CALIBRATOR_V1_0_FINAL.zip
 *.ndmc
 
+# Release / build artifacts (regenerate from source)
+*.zip
+NDM_Calibrator/deliverable_qt_mock/
+NDM_Calibrator/e2e_artifacts/
+NDM_Calibrator/comparison/
+NDM_Calibrator/web-ui/dist/
+NDM_Calibrator/web-ui/scripts/screenshots/
+
+# pytest 临时/审计残留目录
+.pytest-*/
+.pytest_*/
+NDM_Calibrator/_audit_examples.py
+
+# 私有内容：3D 装箱模块不随本仓库发布
+3d/
+
+# Local editor / tool config
+.claude/settings.local.json
+
 # IDE
 .vscode/
 .idea/

@@ -1,0 +1,639 @@
+{
+  "environment": {
+    "os": "Windows-10-10.0.26200-SP0",
+    "python": "3.11.15",
+    "qt": "6.7.2",
+    "pyside6": "6.7.2",
+    "requested_scale": 1.25,
+    "device_pixel_ratio": 1.25,
+    "platform_plugin": "offscreen"
+  },
+  "images": {
+    "web": {
+      "count": 11,
+      "size": [
+        1440,
+        900
+      ],
+      "aspect": 1.6
+    },
+    "qt": {
+      "count": 12,
+      "size": [
+        1440,
+        900
+      ],
+      "aspect": 1.6
+    },
+    "comparison": {
+      "count": 11,
+      "size": [
+        2880,
+        934
+      ]
+    },
+    "reference_states": {
+      "count": 5,
+      "size": [
+        1440,
+        900
+      ]
+    },
+    "interaction_states": {
+      "count": 4,
+      "size": [
+        1440,
+        900
+      ]
+    },
+    "state_comparison": {
+      "count": 5,
+      "size": [
+        2880,
+        934
+      ]
+    }
+  },
+  "viewports": {
+    "1100x700": {
+      "window_size": [
+        1100,
+        700
+      ],
+      "client_size": [
+        1100,
+        700
+      ],
+      "dashboard": {
+        "workflow_share": 0.4,
+        "plot": {
+          "width": 480,
+          "height": 260,
+          "aspect": 1.846
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "data": {
+        "left_share": 0.6,
+        "plot": {
+          "width": 328,
+          "height": 308,
+          "aspect": 1.065
+        }
+      },
+      "identification": {
+        "plot": {
+          "width": 448,
+          "height": 292,
+          "aspect": 1.534
+        }
+      },
+      "calibration": {
+        "plot": {
+          "width": 782,
+          "height": 380,
+          "aspect": 2.058
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "residual": {
+        "plot": {
+          "width": 782,
+          "height": 205,
+          "aspect": 3.815
+        },
+        "data_x": [
+          0.0,
+          29.5
+        ]
+      },
+      "histogram": {
+        "plot": {
+          "width": 782,
+          "height": 185,
+          "aspect": 4.227
+        },
+        "data_x": [
+          -0.15,
+          0.12
+        ]
+      },
+      "bootstrap": {
+        "plot": {
+          "width": 782,
+          "height": 245,
+          "aspect": 3.192
+        },
+        "data_x": [
+          2.4,
+          2.6
+        ]
+      },
+      "text_layout": {
+        "clipped": 0,
+        "overlaps": 0
+      },
+      "tables": {
+        "dashboard": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "data": {
+          "tables": 2,
+          "scrollable": 1,
+          "elided": 0
+        },
+        "model": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "parameters": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "identification": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "calibration": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "diagnostics": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "uncertainty": {
+          "tables": 2,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "export": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "settings": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "about": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        }
+      },
+      "interaction_states": {
+        "states_checked": 12
+      }
+    },
+    "1366x768": {
+      "window_size": [
+        1366,
+        768
+      ],
+      "client_size": [
+        1366,
+        768
+      ],
+      "dashboard": {
+        "workflow_share": 0.4,
+        "plot": {
+          "width": 640,
+          "height": 260,
+          "aspect": 2.462
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "data": {
+        "left_share": 0.6,
+        "plot": {
+          "width": 434,
+          "height": 360,
+          "aspect": 1.206
+        }
+      },
+      "identification": {
+        "plot": {
+          "width": 608,
+          "height": 292,
+          "aspect": 2.082
+        }
+      },
+      "calibration": {
+        "plot": {
+          "width": 1048,
+          "height": 380,
+          "aspect": 2.758
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "residual": {
+        "plot": {
+          "width": 1048,
+          "height": 205,
+          "aspect": 5.112
+        },
+        "data_x": [
+          0.0,
+          29.5
+        ]
+      },
+      "histogram": {
+        "plot": {
+          "width": 1048,
+          "height": 185,
+          "aspect": 5.665
+        },
+        "data_x": [
+          -0.15,
+          0.12
+        ]
+      },
+      "bootstrap": {
+        "plot": {
+          "width": 1056,
+          "height": 276,
+          "aspect": 3.826
+        },
+        "data_x": [
+          2.4,
+          2.6
+        ]
+      },
+      "text_layout": {
+        "clipped": 0,
+        "overlaps": 0
+      },
+      "tables": {
+        "dashboard": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "data": {
+          "tables": 2,
+          "scrollable": 1,
+          "elided": 0
+        },
+        "model": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "parameters": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "identification": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "calibration": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "diagnostics": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "uncertainty": {
+          "tables": 2,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "export": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "settings": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "about": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        }
+      },
+      "interaction_states": {
+        "states_checked": 12
+      }
+    },
+    "1440x900": {
+      "window_size": [
+        1440,
+        900
+      ],
+      "client_size": [
+        1440,
+        900
+      ],
+      "dashboard": {
+        "workflow_share": 0.4,
+        "plot": {
+          "width": 684,
+          "height": 260,
+          "aspect": 2.631
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "data": {
+        "left_share": 0.6,
+        "plot": {
+          "width": 464,
+          "height": 426,
+          "aspect": 1.089
+        }
+      },
+      "identification": {
+        "plot": {
+          "width": 652,
+          "height": 292,
+          "aspect": 2.233
+        }
+      },
+      "calibration": {
+        "plot": {
+          "width": 1130,
+          "height": 380,
+          "aspect": 2.974
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "residual": {
+        "plot": {
+          "width": 1130,
+          "height": 227,
+          "aspect": 4.978
+        },
+        "data_x": [
+          0.0,
+          29.5
+        ]
+      },
+      "histogram": {
+        "plot": {
+          "width": 1130,
+          "height": 228,
+          "aspect": 4.956
+        },
+        "data_x": [
+          -0.15,
+          0.12
+        ]
+      },
+      "bootstrap": {
+        "plot": {
+          "width": 1130,
+          "height": 396,
+          "aspect": 2.854
+        },
+        "data_x": [
+          2.4,
+          2.6
+        ]
+      },
+      "text_layout": {
+        "clipped": 0,
+        "overlaps": 0
+      },
+      "tables": {
+        "dashboard": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "data": {
+          "tables": 2,
+          "scrollable": 1,
+          "elided": 0
+        },
+        "model": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "parameters": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "identification": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "calibration": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "diagnostics": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "uncertainty": {
+          "tables": 2,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "export": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "settings": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "about": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        }
+      },
+      "interaction_states": {
+        "states_checked": 12
+      }
+    },
+    "1920x1080": {
+      "window_size": [
+        1920,
+        1080
+      ],
+      "client_size": [
+        1920,
+        1080
+      ],
+      "dashboard": {
+        "workflow_share": 0.4,
+        "plot": {
+          "width": 972,
+          "height": 260,
+          "aspect": 3.738
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "data": {
+        "left_share": 0.6,
+        "plot": {
+          "width": 656,
+          "height": 552,
+          "aspect": 1.188
+        }
+      },
+      "identification": {
+        "plot": {
+          "width": 940,
+          "height": 292,
+          "aspect": 3.219
+        }
+      },
+      "calibration": {
+        "plot": {
+          "width": 1610,
+          "height": 539,
+          "aspect": 2.987
+        },
+        "data_x": [
+          0.0,
+          50.0
+        ]
+      },
+      "residual": {
+        "plot": {
+          "width": 1610,
+          "height": 317,
+          "aspect": 5.079
+        },
+        "data_x": [
+          0.0,
+          29.5
+        ]
+      },
+      "histogram": {
+        "plot": {
+          "width": 1610,
+          "height": 318,
+          "aspect": 5.063
+        },
+        "data_x": [
+          -0.15,
+          0.12
+        ]
+      },
+      "bootstrap": {
+        "plot": {
+          "width": 1610,
+          "height": 492,
+          "aspect": 3.272
+        },
+        "data_x": [
+          2.4,
+          2.6
+        ]
+      },
+      "text_layout": {
+        "clipped": 0,
+        "overlaps": 0
+      },
+      "tables": {
+        "dashboard": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "data": {
+          "tables": 2,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "model": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "parameters": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "identification": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "calibration": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "diagnostics": {
+          "tables": 1,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "uncertainty": {
+          "tables": 2,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "export": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "settings": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        },
+        "about": {
+          "tables": 0,
+          "scrollable": 0,
+          "elided": 0
+        }
+      },
+      "interaction_states": {
+        "states_checked": 12
+      }
+    }
+  }
+}

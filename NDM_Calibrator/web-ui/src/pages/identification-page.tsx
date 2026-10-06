@@ -23,10 +23,10 @@ type AlgoKey = "least_squares" | "nelder_mead" | "differential_evolution" | "mul
 type RunState = "idle" | "running" | "completed";
 
 const algorithms: { key: AlgoKey; label: string; detail: string }[] = [
-  { key: "least_squares", label: "Least Squares", detail: "TRF / Dogbox" },
+  { key: "least_squares", label: "最小二乘", detail: "TRF / Dogbox" },
   { key: "nelder_mead", label: "Nelder-Mead", detail: "无梯度局部搜索" },
-  { key: "differential_evolution", label: "Differential Evolution", detail: "全局搜索" },
-  { key: "multistart", label: "Multi-start", detail: "多起点局部搜索" },
+  { key: "differential_evolution", label: "差分进化", detail: "全局搜索" },
+  { key: "multistart", label: "多起点", detail: "多起点局部搜索" },
 ];
 
 export function IdentificationPage({ onToast }: { onToast: (msg: string) => void }) {
@@ -65,7 +65,7 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
         setElapsed(identificationTimeline.elapsedSeconds);
         setChartData(convergence);
         setState("completed");
-        onToast("Identification completed");
+        onToast("参数辨识已完成");
         return;
       }
       const idx = Math.min(convergence.length - 1, Math.floor(frac * convergence.length));
@@ -129,10 +129,10 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
             <h3 className="mb-3 text-[15px] font-semibold text-text-primary">算法设置</h3>
             <div className="space-y-2.5">
               {[
-                ["Method", "TRF"],
-                ["Max evaluations", "2000"],
-                ["Tolerance", "1e-8"],
-                ["Seed", "42"],
+                ["方法", "TRF"],
+                ["最大评估次数", "2000"],
+                ["容差", "1e-8"],
+                ["随机种子", "42"],
               ].map(([k, v]) => (
                 <div key={k} className="flex items-center justify-between">
                   <span className="text-[13px] text-text-secondary">{k}</span>
@@ -145,7 +145,7 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
               onClick={() => setShowAdvanced((s) => !s)}
               className="flex w-full items-center justify-between text-[13px] text-text-secondary hover:text-text-primary"
             >
-              <span>Advanced</span>
+              <span>高级设置</span>
               <ChevronDown
                 className={cn("h-4 w-4 transition-transform duration-150", showAdvanced && "rotate-180")}
               />
@@ -175,26 +175,26 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
               <Badge
                 variant={state === "running" ? "running" : state === "completed" ? "success" : "neutral"}
               >
-                {state === "idle" ? "Ready" : state === "running" ? "Running" : "Completed"}
+                {state === "idle" ? "就绪" : state === "running" ? "运行中" : "已完成"}
               </Badge>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <div className="text-xs text-text-muted">Evaluations</div>
+                <div className="text-xs text-text-muted">评估次数</div>
                 <div className="text-xl font-semibold text-text-primary text-tabular">
                   {evals.toLocaleString()}
                   <span className="text-sm font-normal text-text-muted"> / {identificationTimeline.maxEvaluations.toLocaleString()}</span>
                 </div>
               </div>
               <div>
-                <div className="text-xs text-text-muted">Best Objective</div>
+                <div className="text-xs text-text-muted">最佳目标函数</div>
                 <div className="text-xl font-semibold text-text-primary text-tabular">
                   {objective.toFixed(4)}
                 </div>
               </div>
               <div>
-                <div className="text-xs text-text-muted">Elapsed</div>
+                <div className="text-xs text-text-muted">运行时间</div>
                 <div className="text-xl font-semibold text-text-primary text-tabular">
                   {elapsed.toFixed(2)} s
                 </div>
@@ -208,7 +208,7 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
 
           <div className="rounded-lg border border-border bg-surface p-5">
             <h3 className="mb-3 text-[15px] font-semibold text-text-primary">
-              Objective vs Evaluations
+              目标函数与评估次数
             </h3>
             <div className="h-[240px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -219,7 +219,7 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
                     tick={{ fontSize: 11, fill: "#929caa" }}
                     tickLine={false}
                     axisLine={{ stroke: "#dde3ea" }}
-                    label={{ value: "Evaluations", position: "insideBottom", offset: -2, fontSize: 11, fill: "#929caa" }}
+                    label={{ value: "评估次数", position: "insideBottom", offset: -2, fontSize: 11, fill: "#929caa" }}
                   />
                   <YAxis
                     tick={{ fontSize: 11, fill: "#929caa" }}
@@ -233,7 +233,7 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
                   <Line
                     type="monotone"
                     dataKey="objective"
-                    name="Objective"
+                    name="目标函数"
                     stroke={chartColors.measured}
                     strokeWidth={1.8}
                     dot={false}
@@ -246,7 +246,7 @@ export function IdentificationPage({ onToast }: { onToast: (msg: string) => void
           {state === "completed" ? (
             <div className="flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-3">
               <Badge variant="success">
-                <BadgeCheck className="h-3.5 w-3.5" /> Completed
+                <BadgeCheck className="h-3.5 w-3.5" /> 已完成
               </Badge>
               <span className="text-[13px] text-text-secondary">最佳参数:</span>
               {Object.entries(bestParameters).map(([k, v]) => (

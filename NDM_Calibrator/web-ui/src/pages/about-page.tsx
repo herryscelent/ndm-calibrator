@@ -21,9 +21,9 @@ export function AboutPage() {
           非线性动态模型参数辨识与校准软件
         </p>
         <div className="mt-2 flex items-center gap-2 text-[13px] text-text-muted">
-          <span>Prototype UI</span>
+          <span>视觉原型</span>
           <span>·</span>
-          <span>Version 1.0</span>
+          <span>版本 1.0</span>
         </div>
 
         <div className="mt-5 border-t border-border pt-4">
@@ -43,7 +43,7 @@ export function AboutPage() {
         </div>
 
         <p className="mt-5 text-xs text-text-muted">
-          Current mock project: {project.name} — synthetic demonstration data.
+          当前演示项目：{project.name} · 合成示例数据。
         </p>
       </div>
     </div>

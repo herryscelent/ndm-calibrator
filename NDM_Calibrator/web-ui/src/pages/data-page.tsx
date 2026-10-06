@@ -95,10 +95,10 @@ export function DataPage() {
         actions={
           <>
             <Button variant="secondary">
-              <Upload className="h-4 w-4" /> Import CSV
+              <Upload className="h-4 w-4" /> 导入 CSV
             </Button>
             <Button variant="secondary">
-              <Upload className="h-4 w-4" /> Import Excel
+              <Upload className="h-4 w-4" /> 导入 Excel
             </Button>
           </>
         }
@@ -107,18 +107,18 @@ export function DataPage() {
       {/* Data summary */}
       <div className="mb-5 flex flex-wrap items-center gap-3 text-[13px] text-text-secondary">
         <span className="text-text-primary font-medium text-tabular">
-          {dataSummary.rows.toLocaleString()} rows
+          {dataSummary.rows.toLocaleString()} 行
         </span>
         <span className="text-border-strong">|</span>
-        <span>{dataSummary.columns} columns</span>
+        <span>{dataSummary.columns} 列</span>
         <span className="text-border-strong">|</span>
-        <span className="text-tabular">{dataSummary.missing} missing</span>
+        <span className="text-tabular">{dataSummary.missing} 个缺失值</span>
         <span className="text-border-strong">|</span>
-        <span>{dataSummary.durationMin} min duration</span>
-        <div className="ml-auto flex gap-2">
-          <Button variant="ghost" size="sm">Select Range</Button>
-          <Button variant="ghost" size="sm">Missing Values</Button>
-          <Button variant="ghost" size="sm">Reset</Button>
+        <span>时长 {dataSummary.durationMin} 分钟</span>
+        <div className="flex w-full gap-2 sm:ml-auto sm:w-auto">
+          <Button variant="ghost" size="sm">选择范围</Button>
+          <Button variant="ghost" size="sm">处理缺失值</Button>
+          <Button variant="ghost" size="sm">重置</Button>
         </div>
       </div>
 
@@ -134,8 +134,8 @@ export function DataPage() {
               className="h-8 w-44 text-[13px]"
             />
           </div>
-          <div className="overflow-hidden rounded-lg border border-border">
-            <table className="w-full text-[13px]">
+          <div className="overflow-x-auto rounded-lg border border-border">
+            <table className="w-full min-w-[560px] text-[13px]">
               <thead>
                 {table.getHeaderGroups().map((hg) => (
                   <tr key={hg.id} className="border-b border-border bg-surface-secondary">
@@ -178,12 +178,12 @@ export function DataPage() {
         <div className="flex flex-col gap-5 xl:col-span-2">
           <div>
             <h3 className="mb-2 text-[15px] font-semibold text-text-primary">字段映射</h3>
-            <div className="overflow-hidden rounded-lg border border-border">
-              <table className="w-full text-[13px]">
+            <div className="overflow-x-auto rounded-lg border border-border">
+              <table className="w-full min-w-[320px] text-[13px]">
                 <thead>
                   <tr className="border-b border-border bg-surface-secondary">
-                    <th className="px-3 py-2 text-left font-medium text-text-secondary">Column</th>
-                    <th className="px-3 py-2 text-left font-medium text-text-secondary">Role</th>
+                    <th className="px-3 py-2 text-left font-medium text-text-secondary">字段</th>
+                    <th className="px-3 py-2 text-left font-medium text-text-secondary">角色</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -212,7 +212,7 @@ export function DataPage() {
                                   >
                                     {r}
                                   </Badge>
-                                  {r}
+                                  {{ Time: "时间", Input: "输入", Output: "输出", State: "状态", Ignore: "忽略" }[r]}
                                 </span>
                               </SelectItem>
                             ))}
@@ -234,8 +234,8 @@ export function DataPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="position">Output · position</SelectItem>
-                  <SelectItem value="velocity">State · velocity</SelectItem>
+                  <SelectItem value="position">输出 · position</SelectItem>
+                  <SelectItem value="velocity">状态 · velocity</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -252,7 +252,7 @@ export function DataPage() {
                     />
                     <YAxis tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} width={44} />
                     <Tooltip content={<ChartTooltip />} />
-                    <Line type="monotone" dataKey="u" name="Input (u)" stroke={chartColors.measured} strokeWidth={1.5} dot={false} />
+                    <Line type="monotone" dataKey="u" name="输入 (u)" stroke={chartColors.measured} strokeWidth={1.5} dot={false} />
                     <Line
                       type="monotone"
                       dataKey={plotSeries}

@@ -30,10 +30,13 @@ def _embed_figure(fig) -> str:
     return f"data:image/png;base64,{encoded}"
 
 
-def export_html_report(project: Project, dest_dir: Path | str) -> str:
+def export_html_report(project: Project, dest_dir: Path | str, checks: Dict[str, bool] | None = None) -> str:
     dest_dir = Path(dest_dir)
     if not dest_dir.exists():
         raise NDMCError(f"目标目录不存在: {dest_dir}")
+
+    def enabled(key: str) -> bool:
+        return checks is None or checks.get(key, True)
 
     cal = project.results.get("calibration", {})
     ident = project.results.get("identification", {})
@@ -41,16 +44,17 @@ def export_html_report(project: Project, dest_dir: Path | str) -> str:
 
     sections = []
     sections.append(f"<h1>{project.name}</h1><p>{project.description}</p>")
-    sections.append(_info_table([
-        ("软件", f"{APP_NAME_CN} {APP_VERSION} ({APP_NAME_EN})"),
-        ("生成时间", project.modified_at),
-        ("数据来源", project.data_source or "—"),
-        ("模型状态", ", ".join(project.model.states) if project.model else "—"),
-        ("随机种子", str(ident.get("result", {}).get("seed"))),
-    ]))
+    if enabled("summary"):
+        sections.append(_info_table([
+            ("软件", f"{APP_NAME_CN} {APP_VERSION} ({APP_NAME_EN})"),
+            ("生成时间", project.modified_at),
+            ("数据来源", project.data_source or "—"),
+            ("模型状态", ", ".join(project.model.states) if project.model else "—"),
+            ("随机种子", str(ident.get("result", {}).get("seed"))),
+        ]))
 
     # Data summary
-    if project.experiment is not None:
+    if project.experiment is not None and enabled("summary"):
         exp = project.experiment
         sections.append("<h2>数据摘要</h2>")
         sections.append(_info_table([
@@ -61,17 +65,18 @@ def export_html_report(project: Project, dest_dir: Path | str) -> str:
         ]))
 
     # Model definition
-    if project.model is not None:
+    if project.model is not None and enabled("summary"):
         sections.append("<h2>模型定义</h2><pre>" + _model_text(project) + "</pre>")
 
     # Parameters
-    sections.append("<h2>参数配置</h2>")
-    param_rows = [[p.name, p.initial, p.lower, p.upper, "待辨识" if p.free else "固定"] for p in project.parameters]
-    sections.append(_html_table(["参数", "初值", "下限", "上限", "状态"], param_rows))
+    if enabled("parameters"):
+        sections.append("<h2>参数配置</h2>")
+        param_rows = [[p.name, p.initial, p.lower, p.upper, "待辨识" if p.free else "固定"] for p in project.parameters]
+        sections.append(_html_table(["参数", "初值", "下限", "上限", "状态"], param_rows))
 
     # Identification
     result = ident.get("result", {})
-    if result:
+    if result and enabled("parameters"):
         sections.append("<h2>辨识算法与结果</h2>")
         rows = [
             ["算法", result.get("algorithm", "")],
@@ -87,24 +92,24 @@ def export_html_report(project: Project, dest_dir: Path | str) -> str:
 
     # Metrics
     metrics = cal.get("metrics", {}).get("summary", {})
-    if metrics:
+    if metrics and enabled("metrics"):
         sections.append("<h2>拟合指标</h2>")
         sections.append(_info_table([[k, f"{v:.6g}"] for k, v in metrics.items()]))
 
     # Fit figure
-    fit_img = _make_fit_figure(project)
+    fit_img = _make_fit_figure(project) if enabled("simulation") else None
     if fit_img:
         sections.append("<h2>拟合曲线</h2>")
         sections.append(f'<img src="{fit_img}" style="max-width:100%"/>')
 
     # Residuals
-    resid_img = _make_residual_figure(project)
+    resid_img = _make_residual_figure(project) if enabled("residuals") else None
     if resid_img:
         sections.append("<h2>残差分析</h2>")
         sections.append(f'<img src="{resid_img}" style="max-width:100%"/>')
 
     # Identifiability
-    if ident_vals := cal.get("identifiability"):
+    if enabled("diagnostics") and (ident_vals := cal.get("identifiability")):
         sections.append("<h2>参数可辨识性</h2>")
         id_rows = [
             ("条件数", f"{ident_vals.get('condition_number', '—')}"),
@@ -115,7 +120,7 @@ def export_html_report(project: Project, dest_dir: Path | str) -> str:
         sections.append(_info_table(id_rows))
 
     # Bootstrap
-    if boot.get("parameters"):
+    if boot.get("parameters") and enabled("bootstrap"):
         sections.append("<h2>Bootstrap (percentile interval)</h2>")
         rows = []
         for name, info in boot["parameters"].items():

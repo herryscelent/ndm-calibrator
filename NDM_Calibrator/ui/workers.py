@@ -55,7 +55,14 @@ class RunWorker(QThread):
         except CancelledError:
             self.finished_error.emit("操作已取消")
         except Exception as exc:  # surface to GUI, never crash
-            logger.exception("后台任务失败")
+            # Numerical backends surface cooperative cancellation as a domain
+            # error so they do not need to import Qt classes.  Treat that
+            # expected path as informational instead of dumping a traceback
+            # into the application log.
+            if "取消" in str(exc):
+                logger.info("后台任务已取消")
+            else:
+                logger.exception("后台任务失败")
             self.finished_error.emit(str(exc))
 
     def cancel(self) -> None:

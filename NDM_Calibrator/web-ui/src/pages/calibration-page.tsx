@@ -18,7 +18,7 @@ import { measuredSimulated } from "@/data/mock/timeSeries";
 const parameterResults = [
   { parameter: "k", estimate: "2.514", initial: "2.000", change: "+25.7%", fixed: false },
   { parameter: "c", estimate: "0.176", initial: "0.200", change: "-12.0%", fixed: false },
-  { parameter: "m", estimate: "1.000", initial: "1.000", change: "Fixed", fixed: true },
+  { parameter: "m", estimate: "1.000", initial: "1.000", change: "固定", fixed: true },
 ];
 
 export function CalibrationPage() {
@@ -34,7 +34,7 @@ export function CalibrationPage() {
         <MetricCard label="RMSE" value={fitMetrics.RMSE.toFixed(4)} />
         <MetricCard label="MAE" value={fitMetrics.MAE.toFixed(4)} />
         <MetricCard label="R²" value={fitMetrics.R2.toFixed(4)} />
-        <MetricCard label="Runtime" value={`${fitMetrics.Runtime.toFixed(2)} s`} />
+        <MetricCard label="运行时间" value={`${fitMetrics.Runtime.toFixed(2)} s`} />
       </div>
 
       {/* Main calibration plot */}
@@ -65,7 +65,7 @@ export function CalibrationPage() {
               <Line
                 type="monotone"
                 dataKey="measured"
-                name="Measured"
+                name="实测值"
                 stroke={chartColors.measured}
                 strokeWidth={1.5}
                 dot={false}
@@ -73,7 +73,7 @@ export function CalibrationPage() {
               <Line
                 type="monotone"
                 dataKey="simulated"
-                name="Simulated"
+                name="模拟值"
                 stroke={chartColors.simulated}
                 strokeWidth={2}
                 dot={false}
@@ -86,11 +86,11 @@ export function CalibrationPage() {
       {/* Parameter result table */}
       <div className="mt-6">
         <h3 className="mb-3 text-[15px] font-semibold text-text-primary">参数结果</h3>
-        <div className="overflow-hidden rounded-lg border border-border">
-          <table className="w-full text-[13px]">
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full min-w-[560px] text-[13px]">
             <thead>
               <tr className="border-b border-border bg-surface-secondary">
-                {["Parameter", "Estimate", "Initial", "Change"].map((h) => (
+                {["参数", "估计值", "初值", "变化"].map((h) => (
                   <th key={h} className="px-4 py-2 text-left font-medium text-text-secondary">
                     {h}
                   </th>

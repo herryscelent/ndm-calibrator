@@ -14,7 +14,7 @@ import numpy as np
 from scipy.optimize import least_squares
 
 from core.exceptions import OptimizationError
-from identification.base import IdentificationContext, bounds_and_initial
+from identification.base import IdentificationContext, bounds_and_initial, check_cancelled
 from identification.result import IdentificationResult
 
 
@@ -46,15 +46,24 @@ def run_multistart(
 ) -> IdentificationResult:
     """Run least-squares from multiple starts, return best solution."""
     lower, upper, x0 = bounds_and_initial(project)
-    n_starts = int(options.get("n_starts", 10))
-    seed = int(seed) if seed is not None else int(options.get("seed", 0))
+    try:
+        n_starts = int(options.get("n_starts", 10))
+    except (TypeError, ValueError) as exc:
+        raise OptimizationError("多起点数量必须是正整数") from exc
+    if n_starts < 1:
+        raise OptimizationError("多起点数量必须 >= 1")
+    raw_seed = seed if seed is not None else (options["seed"] if "seed" in options else 0)
+    seed = int(raw_seed) if raw_seed is not None else None
     method = options.get("method", "trf")
+    if method not in ("trf", "dogbox"):
+        raise OptimizationError(f"不支持的多起点 least_squares 方法: {method}")
 
     guesses = generate_initial_guesses(lower, upper, n_starts, seed)
 
     all_solutions: List[Dict[str, Any]] = []
 
     def residuals(theta: np.ndarray) -> np.ndarray:
+        check_cancelled(options)
         params = ctx.build_parameter_dict(theta)
         sim = ctx.simulator.simulate(
             params, ctx.experiment,
@@ -76,11 +85,31 @@ def run_multistart(
             pieces.append(residuals_for_objective(measured, predicted, ctx.objective_config, w))
         return np.concatenate(pieces)
 
+    solver_options: dict[str, Any] = {}
+    if options.get("max_iterations") is not None:
+        try:
+            max_nfev = int(options["max_iterations"])
+        except (TypeError, ValueError) as exc:
+            raise OptimizationError("最大迭代次数必须是正整数") from exc
+        if max_nfev < 1:
+            raise OptimizationError("最大迭代次数必须 >= 1")
+        solver_options["max_nfev"] = max_nfev
+    tolerance = options.get("tolerance")
+    if tolerance is not None:
+        try:
+            tolerance = float(tolerance)
+        except (TypeError, ValueError) as exc:
+            raise OptimizationError("容差必须是正数") from exc
+        if not np.isfinite(tolerance) or tolerance <= 0:
+            raise OptimizationError("容差必须是正的有限数")
+        solver_options.update({"ftol": tolerance, "xtol": tolerance, "gtol": tolerance})
+
     start = time.time()
     for i, g in enumerate(guesses):
+        check_cancelled(options)
         try:
             ls = least_squares(
-                residuals, g, bounds=(lower, upper), method=method,
+                residuals, g, bounds=(lower, upper), method=method, **solver_options,
             )
             theta = ls.x
             obj = ctx.evaluate(theta)
@@ -94,6 +123,7 @@ def run_multistart(
             "success": bool(ls.success),
             "nfev": int(ls.nfev),
         })
+        check_cancelled(options)
     runtime = time.time() - start
 
     feasible = [s for s in all_solutions if s["theta"] is not None and np.isfinite(s["objective"])]

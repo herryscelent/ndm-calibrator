@@ -52,7 +52,7 @@ export const identifiability = {
   rankTotal: 2,
   minSingularValue: 0.184,
   singularValues: [5.84, 0.184],
-  note: "No strong local identifiability issue detected in the current mock example.",
+  note: "当前示例未检测到明显的局部可辨识性问题。",
 };
 
 export const correlation = {

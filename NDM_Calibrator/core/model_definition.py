@@ -39,6 +39,13 @@ _ALLOWED_FUNCTIONS = {
     "tanh": sp.tanh,
 }
 
+# Safe mathematical constants accepted in user expressions.  They are
+# represented as SymPy objects so no Python evaluation is involved.
+_ALLOWED_CONSTANTS = {
+    "pi": sp.pi,
+    "E": sp.E,
+}
+
 # Simple regex to find candidate tokens for blacklist checking.
 _TOKEN_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 
@@ -179,6 +186,7 @@ class DynamicModel:
         output_exprs: List[str],
         initial_conditions: Dict[str, float],
         description: str = "",
+        builtin_key: str | None = None,
     ):
         self.states = list(states)
         self.inputs = list(inputs)
@@ -188,6 +196,9 @@ class DynamicModel:
         self.output_exprs = list(output_exprs)
         self.initial_conditions = dict(initial_conditions)
         self.description = description
+        # Keep the template identity for persistence/UI purposes.  User
+        # models leave this unset and are serialized with their full schema.
+        self.builtin_key = builtin_key
 
         # Compile the symbolic model.
         self._symbols = {
@@ -216,6 +227,7 @@ class DynamicModel:
             output_exprs=model.output_exprs,
             initial_conditions=model.initial_defaults,
             description=model.description,
+            builtin_key=model.key,
         )
 
     @classmethod
@@ -252,6 +264,9 @@ class DynamicModel:
             outputs = list(states)
         if output_equations is None:
             output_equations = {out: out for out in outputs}
+        missing_outputs = [out for out in outputs if out not in output_equations]
+        if missing_outputs:
+            raise ModelParseError(f"缺少输出方程: {missing_outputs}")
 
         if initial_conditions is None:
             initial_conditions = {st: 0.0 for st in states}
@@ -286,7 +301,22 @@ class DynamicModel:
             if not expr_str:
                 raise ModelParseError(f"{context}: 表达式为空")
             tokens = set(_TOKEN_RE.findall(expr_str))
-            blacklist = tokens - set(state_syms) - set(input_syms) - set(param_syms) - set(_ALLOWED_FUNCTIONS)
+            # Scientific notation (e.g. ``1e-3``) contributes an ``e`` token
+            # to the lightweight blacklist; remove that token when it occurs
+            # as part of a numeric literal.  SymPy still performs the actual
+            # parse and validation below.
+            numeric_exponent = bool(re.search(r"(?:\d|\.)[eE][+-]?\d", expr_str))
+            allowed_names = (
+                set(state_syms)
+                | set(input_syms)
+                | set(param_syms)
+                | set(_ALLOWED_FUNCTIONS)
+                | set(_ALLOWED_CONSTANTS)
+                | {"t"}
+            )
+            blacklist = tokens - allowed_names
+            if numeric_exponent:
+                blacklist.discard("e")
             # Allow the differential placeholder token "dt" inside "dx/dt" keys
             # is not present here since we only parse RHS expressions.
             if blacklist:
@@ -295,8 +325,15 @@ class DynamicModel:
                 )
             try:
                 parsed = sp.sympify(
-                    expr_str,
-                    locals={**_ALLOWED_FUNCTIONS, **state_syms, **input_syms, **param_syms},
+                expr_str,
+                    locals={
+                        **_ALLOWED_FUNCTIONS,
+                        **_ALLOWED_CONSTANTS,
+                        "t": _TIME_SYMBOL,
+                        **state_syms,
+                        **input_syms,
+                        **param_syms,
+                    },
                     evaluate=True,
                 )
             except (sp.SympifyError, TypeError, ValueError, SyntaxError) as exc:
@@ -323,6 +360,8 @@ class DynamicModel:
 
         # Parse output equations.
         parsed_outputs = {}
+        if len(self.outputs) != len(self.output_exprs):
+            raise ModelError("输出数量与输出方程数量不匹配")
         for out, expr in zip(self.outputs, self.output_exprs):
             parsed = _parse(expr, f"输出 {out}")
             parsed_outputs[out] = parsed
@@ -367,20 +406,49 @@ class DynamicModel:
         return name in self.inputs
 
     def rhs_lambdified(self, parameter_values: Dict[str, float]):
-        """Return a callable rhs(t, x) for a given parameter dict."""
-        state_vec = sp.Matrix(self._parsed_rhs)
-        state_vec = state_vec.xreplace(
+        """Return a callable ``rhs(t, x, u_by_name=None)``.
+
+        The optional input mapping keeps the historical ``rhs(t, x)`` form
+        usable for autonomous models while making input- and time-dependent
+        user equations behave the same as the main simulator.
+        """
+        missing = [name for name in self.parameters if name not in parameter_values]
+        if missing:
+            raise ModelError(f"缺少模型参数值: {missing}")
+        state_syms = list(self._symbols["states"].values())
+        input_syms = list(self._symbols["inputs"].values())
+        state_vec = sp.Matrix(self._parsed_rhs).xreplace(
             {self._symbols["parameters"][name]: sp.Float(float(value)) for name, value in parameter_values.items()}
         )
-        func = sp.lambdify(
-            (_TIME_SYMBOL, sp.Matrix(list(self._symbols["states"].values()))),
-            state_vec,
-            modules="numpy",
-        )
-        return func
+        if input_syms:
+            func = sp.lambdify((_TIME_SYMBOL, state_syms, input_syms), state_vec, modules="numpy")
+        else:
+            func = sp.lambdify((_TIME_SYMBOL, state_syms), state_vec, modules="numpy")
+
+        def _call(t: float, x: np.ndarray, u_by_name: Dict[str, float] | None = None) -> np.ndarray:
+            u_by_name = u_by_name or {}
+            if input_syms:
+                missing_inputs = [name for name in self.inputs if name not in u_by_name]
+                if missing_inputs:
+                    raise ModelError(f"缺少模型输入值: {missing_inputs}")
+                u_vals = np.array([u_by_name[name] for name in self.inputs], dtype=float)
+                values = func(float(t), np.asarray(x, dtype=float), u_vals)
+            else:
+                values = func(float(t), np.asarray(x, dtype=float))
+            return np.asarray(values, dtype=float).reshape(-1)
+
+        return _call
 
     def output_lambdified(self, parameter_values: Dict[str, float]):
-        """Return a callable output(x, u_by_name) -> dict output_name -> value."""
+        """Return a callable for model outputs.
+
+        Both ``output(x, u_by_name)`` and the explicit
+        ``output(t, x, u_by_name)`` forms are accepted; the former uses
+        ``t=0`` for backwards compatibility.
+        """
+        missing = [name for name in self.parameters if name not in parameter_values]
+        if missing:
+            raise ModelError(f"缺少模型参数值: {missing}")
         x_syms = list(self._symbols["states"].values())
         u_syms = list(self._symbols["inputs"].values())
         outputs = {
@@ -389,15 +457,27 @@ class DynamicModel:
             )
             for name, expr in self._parsed_outputs.items()
         }
-        func = sp.lambdify(
-            (sp.Matrix(x_syms), sp.Matrix(u_syms)),
-            [outputs[name] for name in self.outputs],
-            modules="numpy",
-        )
+        if u_syms:
+            func = sp.lambdify((_TIME_SYMBOL, x_syms, u_syms), [outputs[name] for name in self.outputs], modules="numpy")
+        else:
+            func = sp.lambdify((_TIME_SYMBOL, x_syms), [outputs[name] for name in self.outputs], modules="numpy")
 
-        def _call(x: np.ndarray, u_by_name: Dict[str, float]) -> Dict[str, float]:
-            u_vals = np.array([u_by_name[name] for name in self.inputs], dtype=float) if self.inputs else np.array([])
-            result = func(x, u_vals)
+        def _call(*args) -> Dict[str, float]:
+            if len(args) == 2:
+                t, x, u_by_name = 0.0, args[0], args[1]
+            elif len(args) == 3:
+                t, x, u_by_name = args
+            else:
+                raise TypeError("output 需要 (x, u_by_name) 或 (t, x, u_by_name)")
+            u_by_name = u_by_name or {}
+            if u_syms:
+                missing_inputs = [name for name in self.inputs if name not in u_by_name]
+                if missing_inputs:
+                    raise ModelError(f"缺少模型输入值: {missing_inputs}")
+                u_vals = np.array([u_by_name[name] for name in self.inputs], dtype=float)
+                result = func(float(t), np.asarray(x, dtype=float), u_vals)
+            else:
+                result = func(float(t), np.asarray(x, dtype=float))
             if not isinstance(result, (list, tuple)):
                 result = [result]
             return {name: float(v) for name, v in zip(self.outputs, result)}
@@ -408,6 +488,12 @@ class DynamicModel:
         return np.array([float(self.initial_conditions[st]) for st in self.states], dtype=float)
 
     def to_dict(self) -> Dict[str, Any]:
+        if self.builtin_key:
+            return {
+                "kind": "builtin",
+                "builtin_key": self.builtin_key,
+                "description": self.description,
+            }
         return {
             "kind": "user",
             "description": self.description,
@@ -423,15 +509,25 @@ class DynamicModel:
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "DynamicModel":
         if data.get("kind") == "builtin":
-            return cls.from_builtin(data["builtin_key"])
+            key = data.get("builtin_key")
+            if not key:
+                raise ModelParseError("内置模型缺少 builtin_key")
+            return cls.from_builtin(key)
+        states = data.get("states") or []
+        inputs = data.get("inputs") or []
+        parameters = data.get("parameters") or []
+        dynamics = data.get("dynamics") or {}
+        outputs = data.get("outputs") or list(states)
+        output_equations = data.get("output_equations") or {name: name for name in outputs}
+        initial_conditions = data.get("initial_conditions") or {name: 0.0 for name in states}
         return cls.from_user_definition(
-            states=data["states"],
-            inputs=data["inputs"],
-            parameters=data["parameters"],
-            dynamics=data["dynamics"],
-            outputs=data["outputs"],
-            output_equations=data["output_equations"],
-            initial_conditions={k: float(v) for k, v in data["initial_conditions"].items()},
+            states=states,
+            inputs=inputs,
+            parameters=parameters,
+            dynamics=dynamics,
+            outputs=outputs,
+            output_equations=output_equations,
+            initial_conditions={k: float(v) for k, v in initial_conditions.items()},
             description=data.get("description", ""),
         )
 

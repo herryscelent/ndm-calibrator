@@ -8,16 +8,16 @@ import { PageHeader } from "@/components/common/page-header";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/common/select";
 
 const contentOptions = [
-  "Project Summary",
-  "Parameters",
-  "Metrics",
-  "Simulation",
-  "Residuals",
-  "Diagnostics",
-  "Bootstrap",
+  "项目概要",
+  "参数结果",
+  "评估指标",
+  "仿真结果",
+  "残差结果",
+  "诊断结果",
+  "Bootstrap 结果",
 ];
 
-const formats = ["Excel", "CSV", "HTML Report", "PNG Figures"];
+const formats = ["Excel", "CSV", "HTML 报告", "PNG 图像"];
 
 export function ExportPage({ onToast }: { onToast: (msg: string) => void }) {
   const [checked, setChecked] = useState<Record<string, boolean>>(
@@ -28,8 +28,8 @@ export function ExportPage({ onToast }: { onToast: (msg: string) => void }) {
   const [result, setResult] = useState<string | null>(null);
 
   function run() {
-    setResult(`Export completed · ${checked.Simulation ? "6" : "5"} files generated`);
-    onToast("Export completed");
+    setResult(`导出完成 · 已生成 ${checked["仿真结果"] ? "6" : "5"} 个文件`);
+    onToast("导出完成");
   }
 
   return (
@@ -79,7 +79,7 @@ export function ExportPage({ onToast }: { onToast: (msg: string) => void }) {
             <h3 className="mb-4 text-[15px] font-semibold text-text-primary">导出位置</h3>
             <div className="flex gap-2">
               <Input value={dest} onChange={(e) => setDest(e.target.value)} className="font-mono text-[13px]" />
-              <Button variant="secondary" onClick={() => onToast("Select destination (mock)")}>
+              <Button variant="secondary" onClick={() => onToast("已选择导出位置（演示）")}>
                 浏览…
               </Button>
             </div>

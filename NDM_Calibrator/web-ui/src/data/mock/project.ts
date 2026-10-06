@@ -19,11 +19,11 @@ export interface ProjectInfo {
 }
 
 export const project: ProjectInfo = {
-  name: "Second-order Mechanical System Calibration",
-  description: "二阶质量—弹簧—阻尼动态模型",
-  tagline: "Synthetic demonstration project",
-  modelSummary: "Mass-Spring-Damper · x1 position, x2 velocity",
-  lastUpdated: "Aug 13, 2026",
+  name: "二阶机械系统参数校准",
+  description: "二阶质量-弹簧-阻尼动态模型",
+  tagline: "演示项目",
+  modelSummary: "质量-弹簧-阻尼 · x1 位移, x2 速度",
+  lastUpdated: "2026-08-13",
   status: "Ready",
   samples: 4860,
   inputs: 1,

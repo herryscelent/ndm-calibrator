@@ -1,8 +1,23 @@
 [
   {
     "path": ".gitignore",
-    "size": 253,
-    "sha256": "fe718e7babb14f3cbad2d97f08889b9ce5215ed3fe0e43b2b8cfbfb3b9b844e8"
+    "size": 305,
+    "sha256": "d202c3b945870244533d0656ecfa0cac025cc798193e23a6684a3c4bfd97acc8"
+  },
+  {
+    "path": "NDM_CALIBRATOR_WEB_UI_PROTOTYPE_V1.zip",
+    "size": 736412,
+    "sha256": "b19409e83e3eee0fa599f4b1a97f7bfef8336e422dd4cc93e5200657e595ca58"
+  },
+  {
+    "path": "NDM_CALIBRATOR_WEB_UI_V0_9_POLISH.zip",
+    "size": 772164,
+    "sha256": "7501164bce80c965ed855c448ad2bbd8f404d53fcba9fe44d226f89ed4584148"
+  },
+  {
+    "path": "NDM_CALIBRATOR_WEB_UI_V1_0_FREEZE.zip",
+    "size": 758423,
+    "sha256": "7fbb10d605442c38c60637229cf25fe2636b18bcc3ad3f5ce012a20a05f9734d"
   },
   {
     "path": "README.md",
@@ -16,18 +31,18 @@
   },
   {
     "path": "UI_AUDIT.md",
-    "size": 1879,
-    "sha256": "fe5467013530ca27c855a12c08a584219640477ff9ba28d59c66a28ef59ad442"
+    "size": 2877,
+    "sha256": "543700d7d2f9f6dcb8194ad91959257521967da86e8b6f9743953e94ba79efa9"
   },
   {
     "path": "docs/QT_MAPPING.md",
-    "size": 2466,
-    "sha256": "8b94230a402f14fd5e5c4efa418cf9925e5a147c28aba4b53950bc21c0d4845a"
+    "size": 2727,
+    "sha256": "12ae939a1e2538b75e11d31a11b0d1b85da3f83e422384156b15fdff8959f288"
   },
   {
     "path": "docs/UI_DESIGN_SYSTEM.md",
     "size": 3409,
-    "sha256": "77156308f2e9b6cc513f8dae18684dd28f7aa18a0f08d47832c1ba7c5612a075"
+    "sha256": "ef3a362ddd99c92f1b76ace463562b6a613c542772fe2d9b7a7f0286d861368d"
   },
   {
     "path": "index.html",
@@ -66,8 +81,8 @@
   },
   {
     "path": "scripts/screenshots.mjs",
-    "size": 2092,
-    "sha256": "ce9e736068ba88eddbf5c313ea79746205ccd1e5ed37554e5926e464ce672f3c"
+    "size": 14430,
+    "sha256": "b39e229914311051cd891e9c365771624363e0fd80c35bf76032d7541ed1421a"
   },
   {
     "path": "scripts/verify_layout.mjs",
@@ -76,13 +91,13 @@
   },
   {
     "path": "scripts/verify_ui.mjs",
-    "size": 1367,
-    "sha256": "8b25d78d7a2d1c8475913e83fcd5bc0ef5ee601337c3311b5a49bf240cd64e19"
+    "size": 1359,
+    "sha256": "4fd49a9115349b7ca018a9ce5d22a4814725afdc7d8a1a43e393820180f64c7c"
   },
   {
     "path": "src/App.tsx",
-    "size": 3563,
-    "sha256": "98838564e58832c4b1b4d4d486965555cf6121ec29f1ae283467f8e20b1ee46f"
+    "size": 3865,
+    "sha256": "ee57eac1eeae260a7d50cb0b9f37821469b361e31085d2c9335e0332bb5c7954"
   },
   {
     "path": "src/components/charts/chart-theme.tsx",
@@ -91,8 +106,8 @@
   },
   {
     "path": "src/components/common/badge.tsx",
-    "size": 1195,
-    "sha256": "909823a1898ea8619873a650bdde558e6246a43fe906465343434387505ff37a"
+    "size": 1199,
+    "sha256": "08e79e67d413b80e0c0fa817e6cb27c85476b8bfa4d64844b8255ba8a53be1e4"
   },
   {
     "path": "src/components/common/button.tsx",
@@ -116,8 +131,8 @@
   },
   {
     "path": "src/components/common/page-header.tsx",
-    "size": 742,
-    "sha256": "81354bfc1034d24943e5c638aaf28e2521b66d18d174254f4c6ab7b50325235a"
+    "size": 773,
+    "sha256": "b5cdb01c275285486a090de4d2c6db73ca394b4ea35b1d727c172443335a2e6d"
   },
   {
     "path": "src/components/common/progress.tsx",
@@ -136,8 +151,8 @@
   },
   {
     "path": "src/components/common/tabs.tsx",
-    "size": 1760,
-    "sha256": "30ac20be2ad480b5021c467fe34cdc3172d0ee55089ee0dc0eef945b92cebce0"
+    "size": 1787,
+    "sha256": "724a32850ce6eb9d6a3811054d995321201fdf03565e5d69cfb7907a61cc58b3"
   },
   {
     "path": "src/components/common/tooltip.tsx",
@@ -146,18 +161,18 @@
   },
   {
     "path": "src/components/layout/sidebar.tsx",
-    "size": 3840,
-    "sha256": "c1261a92cd78f3bc66ba6fbb918bbfb384244b95fbcc43da96dccf8e61ebc565"
+    "size": 3859,
+    "sha256": "1ed64fdeb9d0c1a480249a6bdd6fa172d456c58e75ab262d6b72b1e039389424"
   },
   {
     "path": "src/components/layout/topbar.tsx",
-    "size": 1565,
-    "sha256": "b75d58e4645f02a803ef94c6e3ad00a432749ae84f23934f8852ef2b098f2f52"
+    "size": 1601,
+    "sha256": "ca6d4eb4cec20deccffc533e17b21c7973ef9829cc63b3c30d7523653ec91f66"
   },
   {
     "path": "src/components/metrics/metric-card.tsx",
-    "size": 733,
-    "sha256": "2fc84fb0fdf150e2658a03d29cd8e2718db744b3082763d7f0048da7cfa516c1"
+    "size": 744,
+    "sha256": "d6e25041be23a86a18794478b12a92071bd0268fb5c763197c5ec464773ef35e"
   },
   {
     "path": "src/components/navigation/config.tsx",
@@ -176,13 +191,13 @@
   },
   {
     "path": "src/data/mock/diagnostics.ts",
-    "size": 1513,
-    "sha256": "7ce53320349061c2c47add994c1f2bc08b1e04df40800b2b665ef6f99d0210e9"
+    "size": 1498,
+    "sha256": "1b101e781e351c9b1951ff682a1ec55221c7bcbc418e948d94b9f6af96ca1730"
   },
   {
     "path": "src/data/mock/model.ts",
-    "size": 962,
-    "sha256": "b9e25d65dbd1020c851c288d674e6661adbc1f2f86c2c267ae62ff654d42c5d6"
+    "size": 916,
+    "sha256": "20a86f4155ef1c2f7b87c87ffbaefb00377c19fdda59b899137b608519af1978"
   },
   {
     "path": "src/data/mock/parameters.ts",
@@ -191,8 +206,8 @@
   },
   {
     "path": "src/data/mock/project.ts",
-    "size": 1045,
-    "sha256": "2296d20f5771ccb653025e6b932a7b337f5b69404f9950b7907eb51822ce5bdb"
+    "size": 1006,
+    "sha256": "42c12c2fb96ef909b06e90a4a390fcb64ce94672b18c78be665b950921bafbee"
   },
   {
     "path": "src/data/mock/timeSeries.ts",
@@ -216,63 +231,63 @@
   },
   {
     "path": "src/pages/about-page.tsx",
-    "size": 1581,
-    "sha256": "f796a0c7ece24afb00468dc1e9758d060827eb6682c70b4148c8a9fb78efb6bd"
+    "size": 1570,
+    "sha256": "b67816512486d17962d9d11886ec6a32ca2fc86b00e7826772140481a802014f"
   },
   {
     "path": "src/pages/calibration-page.tsx",
-    "size": 4820,
-    "sha256": "1d41940edacf64f068cd5bd59317dc1dec11f553f61981c1c216e35fd57492fb"
+    "size": 4838,
+    "sha256": "f05e9cb1667f7367e72805cacc6279588354c5a924039829ef12b0dc7ceaadf3"
   },
   {
     "path": "src/pages/dashboard-page.tsx",
-    "size": 5849,
-    "sha256": "46673e2894c1a5b0e0eed12287bbeff65b8aac2c5c6110f23182de94db5a30f4"
+    "size": 5833,
+    "sha256": "4c58685b518796df739bb2696df3be79756a6b98b655ba3a60522007c7ae72eb"
   },
   {
     "path": "src/pages/data-page.tsx",
-    "size": 10635,
-    "sha256": "17e562ae842bab2adc33eaccce03ed91c94c50c52b49a88d3844a902667422c6"
+    "size": 10780,
+    "sha256": "015314c35758f9172acd509794bf4ecd2e479973ade63d761dce5918df2beb9b"
   },
   {
     "path": "src/pages/diagnostics-page.tsx",
-    "size": 11182,
-    "sha256": "4483774cae253e905489eca36af1bceac70c28f99cea828799fd5a08d07807cd"
+    "size": 11086,
+    "sha256": "8b836a2bbaeaef26468f779d958d77d8459bda7ff49587fee77718c4e0ba30e6"
   },
   {
     "path": "src/pages/export-page.tsx",
-    "size": 3698,
-    "sha256": "49fb75b151b78241f098370e3e37bb6a07e6d285c293779ba108a9f2bdfe1650"
+    "size": 3723,
+    "sha256": "43e0417e03e3a6a143dcf7599a40f69dfc09ebd8774ab796a16189085168e274"
   },
   {
     "path": "src/pages/identification-page.tsx",
-    "size": 10712,
-    "sha256": "f31081a78892f32d7d59d76f2046a08b4f32ad6b2a0e36ad83c9c426d737a4e1"
+    "size": 10728,
+    "sha256": "d71253d9c1a9285620f4070705ed4c10fe852a239281139f452119618ba092e8"
   },
   {
     "path": "src/pages/model-page.tsx",
-    "size": 4602,
-    "sha256": "3e7819456740f2fbbc435433a7474ff187080a4c69faf8bc47eddcfe7f2105ee"
+    "size": 4632,
+    "sha256": "f7464ad0833cd9e5ad65c5bcfa71640d244545a3411adc6dbac13f2122b5cd4c"
   },
   {
     "path": "src/pages/parameters-page.tsx",
-    "size": 7895,
-    "sha256": "57e347c333260bed6ff53b0cfb75d5971d3a8bfb1d62fa42fdd4cc9d085ced95"
+    "size": 7885,
+    "sha256": "8df6bfae580c2ed14d5de4fc1b25fe80607601d57b55935e5cfea195f8fd7ede"
   },
   {
     "path": "src/pages/settings-page.tsx",
-    "size": 3545,
-    "sha256": "430beeea2f576ce37573bc90dd02aea165450a3e857987c1451e057f7764c1e8"
+    "size": 3556,
+    "sha256": "1f6d4f29da74e200720c59fc71e62f6276bda4e71c7067a0b0f636cedb67155d"
   },
   {
     "path": "src/pages/uncertainty-page.tsx",
-    "size": 8478,
-    "sha256": "4df43571a3e533303619a51f7260d77ff578dc10fde6007155238f05f60a6e97"
+    "size": 8580,
+    "sha256": "b7e79af8814a5e90c460147b3b2cd423f7f1b663cc53d4e10505b70296749880"
   },
   {
     "path": "src/styles/index.css",
     "size": 2431,
-    "sha256": "6f7645dba89fe494944d72ec8127601699ed8867e2271909f153845bc06fd01d"
+    "sha256": "5df80d5968ed732fc1d3d37273261532e780f2c47c6829eb745d715ddc34fae9"
   },
   {
     "path": "tsconfig.app.json",

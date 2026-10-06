@@ -13,7 +13,7 @@ export function ModelPage({ onToast }: { onToast: (msg: string) => void }) {
         description="定义状态方程、输入、参数以及观测输出。"
         actions={
           <Button
-            onClick={() => onToast("Model validated")}
+            onClick={() => onToast("模型验证通过")}
             title="验证模型"
           >
             验证模型
@@ -24,12 +24,12 @@ export function ModelPage({ onToast }: { onToast: (msg: string) => void }) {
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
         {/* Model structure */}
         <div className="rounded-lg border border-border bg-surface p-5">
-          <h3 className="mb-4 text-[15px] font-semibold text-text-primary">Model Structure</h3>
+          <h3 className="mb-4 text-[15px] font-semibold text-text-primary">模型结构</h3>
 
           <div className="space-y-4">
             <div>
               <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-text-muted">
-                States
+                状态变量
               </div>
               {model.states.map((s) => (
                 <div key={s.name} className="flex items-center justify-between rounded-[6px] px-2 py-1.5 text-[13px] hover:bg-surface-hover">
@@ -41,7 +41,7 @@ export function ModelPage({ onToast }: { onToast: (msg: string) => void }) {
 
             <div>
               <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-text-muted">
-                Input
+                输入
               </div>
               {model.inputs.map((s) => (
                 <div key={s.name} className="flex items-center justify-between rounded-[6px] px-2 py-1.5 text-[13px] hover:bg-surface-hover">
@@ -53,7 +53,7 @@ export function ModelPage({ onToast }: { onToast: (msg: string) => void }) {
 
             <div>
               <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-text-muted">
-                Parameters
+                参数
               </div>
               {model.parameters.map((s) => (
                 <div key={s.name} className="flex items-center justify-between rounded-[6px] px-2 py-1.5 text-[13px] hover:bg-surface-hover">
@@ -65,7 +65,7 @@ export function ModelPage({ onToast }: { onToast: (msg: string) => void }) {
 
             <div>
               <div className="mb-1.5 text-xs font-medium uppercase tracking-wide text-text-muted">
-                Output
+                输出
               </div>
               <div className="rounded-[6px] px-2 py-1.5 font-mono text-[13px] text-text-primary">
                 {model.outputs[0]}
@@ -83,7 +83,7 @@ export function ModelPage({ onToast }: { onToast: (msg: string) => void }) {
               <span className="h-2.5 w-2.5 rounded-full bg-text-disabled" />
               <span className="h-2.5 w-2.5 rounded-full bg-text-disabled" />
             </div>
-            <pre className="bg-surface p-4 font-mono text-[13px] leading-7 text-text-primary">
+            <pre className="max-w-full overflow-x-auto bg-surface p-4 font-mono text-[13px] leading-7 text-text-primary">
               {model.equations.map((eq) => (
                 <div key={eq.label} className="flex">
                   <span className="mr-4 select-none text-text-disabled">{eq.label}</span>

@@ -174,6 +174,12 @@ def _check(p):
     _line(p, 10, 18, 19, 6)
 
 
+def _check_circle(p):
+    p.drawEllipse(QRectF(4, 4, 16, 16))
+    _line(p, 7, 12, 10.5, 15.5)
+    _line(p, 10.5, 15.5, 17, 8.5)
+
+
 def _warn(p):
     # triangle
     path = QPainterPath()
@@ -267,6 +273,7 @@ for _name, _fn in {
     "sun": _sun,
     "moon": _moon,
     "check": _check,
+    "check_circle": _check_circle,
     "warn": _warn,
     "error": _error,
     "play": _play,

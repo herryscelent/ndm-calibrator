@@ -32,7 +32,8 @@ def main() -> int:
     logger.info("%s %s (%s) 启动", APP_NAME_CN, APP_VERSION, APP_NAME_EN)
 
     try:
-        from ui.main_window import MainWindow
+        from ui_v2.main_window import MainWindow
+        from ui_v2.theme import apply_theme
         from PySide6.QtWidgets import QApplication
     except ImportError as exc:
         logger.error("GUI 依赖缺失: %s", exc)
@@ -43,6 +44,7 @@ def main() -> int:
     app.setApplicationName(APP_NAME_EN)
     app.setApplicationVersion(APP_VERSION)
     app.setOrganizationName("NDM-Calibrator")
+    apply_theme(app)
 
     window = MainWindow()
     window.show()

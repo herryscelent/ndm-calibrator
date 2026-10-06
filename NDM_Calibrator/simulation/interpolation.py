@@ -16,6 +16,9 @@ def zero_order_hold(t_source: np.ndarray, u_source: np.ndarray, t_query: np.ndar
     _validate_inputs(t_source, u_source)
     if t_source.size == 0:
         raise SimulationError("输入信号为空")
+    t_query = np.asarray(t_query, dtype=float)
+    if not np.all(np.isfinite(t_query)):
+        raise SimulationError("插值: 查询时间包含非有限值")
     idx = np.searchsorted(t_source, t_query, side="right") - 1
     idx = np.clip(idx, 0, t_source.size - 1)
     return np.asarray(u_source, dtype=float)[idx]
@@ -24,6 +27,9 @@ def zero_order_hold(t_source: np.ndarray, u_source: np.ndarray, t_query: np.ndar
 def linear_interpolation(t_source: np.ndarray, u_source: np.ndarray, t_query: np.ndarray) -> np.ndarray:
     """Linear interpolation; clamps to the endpoints outside the source range."""
     _validate_inputs(t_source, u_source)
+    t_query = np.asarray(t_query, dtype=float)
+    if not np.all(np.isfinite(t_query)):
+        raise SimulationError("插值: 查询时间包含非有限值")
     if t_source.size < 2:
         return np.full(t_query.shape, float(np.asarray(u_source, dtype=float)[0]))
     u = np.asarray(u_source, dtype=float)
@@ -31,9 +37,17 @@ def linear_interpolation(t_source: np.ndarray, u_source: np.ndarray, t_query: np
 
 
 def _validate_inputs(t_source: np.ndarray, u_source: np.ndarray) -> None:
+    t_source = np.asarray(t_source)
+    u_source = np.asarray(u_source)
+    if t_source.ndim != 1 or u_source.ndim != 1:
+        raise SimulationError("插值: 时间与数值必须是一维数组")
     if t_source.shape != u_source.shape:
         raise SimulationError("插值: 时间与数值长度不一致")
     if t_source.size == 0:
         raise SimulationError("插值: 空输入")
     if not np.all(np.isfinite(t_source)):
         raise SimulationError("插值: 源时间包含非有限值")
+    if not np.all(np.isfinite(u_source)):
+        raise SimulationError("插值: 源数值包含非有限值")
+    if t_source.size > 1 and np.any(np.diff(t_source) <= 0):
+        raise SimulationError("插值: 源时间必须严格单调递增且不能重复")

@@ -30,7 +30,7 @@ export default function App() {
   const [page, setPage] = useState<PageKey>(
     () => (window.location.hash.replace("#", "") as PageKey) || "dashboard"
   );
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth < 768);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -52,6 +52,14 @@ export default function App() {
     };
   }, [page]);
 
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth < 768) setCollapsed(true);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
   const navigate = useCallback((k: PageKey) => {
     window.location.hash = k;
     setPage(k);
@@ -59,15 +67,17 @@ export default function App() {
 
   return (
     <div className="flex h-full flex-col">
-      <Topbar projectName={topbarProjectName} onSave={() => showToast("Project saved")} />
+      <Topbar projectName={topbarProjectName} onSave={() => showToast("项目已保存")} />
       <div className="flex min-h-0 flex-1">
         <Sidebar
           current={page}
           collapsed={collapsed}
           onNavigate={navigate}
-          onToggleCollapse={() => setCollapsed((c) => !c)}
+          onToggleCollapse={() => {
+            if (window.innerWidth >= 768) setCollapsed((c) => !c);
+          }}
         />
-        <main className="min-w-0 flex-1 overflow-y-auto" style={{ padding: "28px" }}>
+        <main className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-7">
           {page === "dashboard" && <DashboardPage onNavigate={navigate} />}
           {page === "data" && <DataPage />}
           {page === "model" && <ModelPage onToast={showToast} />}

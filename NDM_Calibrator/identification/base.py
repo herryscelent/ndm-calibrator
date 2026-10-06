@@ -22,6 +22,21 @@ from simulation.ode_solver import ODESolverConfig
 from simulation.simulator import Simulator
 
 
+def check_cancelled(options: Dict[str, Any] | None) -> None:
+    """Raise a domain error when a UI worker requested cancellation.
+
+    The token is intentionally carried in the transient options dict instead
+    of the persisted project settings.  Keeping this helper in the domain
+    layer avoids importing Qt worker classes into numerical code.
+    """
+
+    token = options.get("_cancel_token") if options else None
+    if token is not None and token.cancelled():
+        from core.exceptions import OptimizationError
+
+        raise OptimizationError("操作已取消")
+
+
 class IdentificationContext:
     """Encapsulates everything an objective function needs from the project."""
 

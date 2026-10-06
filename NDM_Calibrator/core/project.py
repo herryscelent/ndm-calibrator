@@ -88,7 +88,7 @@ class Project:
                 if self.experiment is not None:
                     zf.writestr(DATA_DIR + "experiment.json", json.dumps(self._experiment_dict(), ensure_ascii=False, indent=2))
                 zf.writestr(RESULTS_DIR + "results.json", json.dumps(self.results, ensure_ascii=False, indent=2))
-        except (OSError, zipfile.BadZipFile) as exc:
+        except (OSError, TypeError, ValueError, zipfile.BadZipFile) as exc:
             raise ProjectError(f"保存项目失败: {exc}") from exc
         self.file_path = path
         self.mark_saved()
@@ -107,18 +107,21 @@ class Project:
         }
 
     def _manifest_dict(self) -> Dict[str, Any]:
+        entries = [
+            PROJECT_JSON,
+            MODEL_JSON,
+            PARAMETERS_JSON,
+            SETTINGS_JSON,
+            MANIFEST_NAME,
+            RESULTS_DIR + "results.json",
+        ]
+        if self.experiment is not None:
+            entries.append(DATA_DIR + "experiment.json")
         return {
             "schema_version": PROJECT_SCHEMA_VERSION,
             "app_name": "NDM-Calibrator",
             "app_version": "V1.0",
-            "entries": [
-                PROJECT_JSON,
-                MODEL_JSON,
-                PARAMETERS_JSON,
-                SETTINGS_JSON,
-                MANIFEST_NAME,
-                RESULTS_DIR + "results.json",
-            ],
+            "entries": entries,
         }
 
     def _experiment_dict(self) -> Dict[str, Any]:

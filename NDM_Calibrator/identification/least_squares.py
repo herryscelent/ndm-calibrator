@@ -10,7 +10,7 @@ from scipy.optimize import least_squares
 
 from core.exceptions import OptimizationError
 from core.objective import ObjectiveConfig, residuals_for_objective
-from identification.base import IdentificationContext, bounds_and_initial
+from identification.base import IdentificationContext, bounds_and_initial, check_cancelled
 from identification.result import IdentificationResult
 
 
@@ -42,6 +42,7 @@ def run_least_squares(
     # Residual builder: weights per output scale the residual so the
     # weighted least-squares objective is optimised.
     def residuals(theta: np.ndarray) -> np.ndarray:
+        check_cancelled(options)
         params = ctx.build_parameter_dict(theta)
         sim = ctx.simulator.simulate(
             params, ctx.experiment,
@@ -62,6 +63,35 @@ def run_least_squares(
             pieces.append(residuals_for_objective(measured, predicted, ctx.objective_config, w))
         return np.concatenate(pieces)
 
+    # ``least_squares`` calls this setting ``max_nfev``.  The UI exposes a
+    # model-oriented name (max_iterations), so translate it here instead of
+    # silently ignoring the user's limit.
+    solver_options: dict[str, Any] = {}
+    if options.get("max_iterations") is not None:
+        try:
+            max_nfev = int(options["max_iterations"])
+        except (TypeError, ValueError) as exc:
+            raise OptimizationError("最大迭代次数必须是正整数") from exc
+        if max_nfev < 1:
+            raise OptimizationError("最大迭代次数必须 >= 1")
+        solver_options["max_nfev"] = max_nfev
+    tolerance = options.get("tolerance")
+    if tolerance is not None:
+        try:
+            tolerance = float(tolerance)
+        except (TypeError, ValueError) as exc:
+            raise OptimizationError("容差必须是正数") from exc
+        if not np.isfinite(tolerance) or tolerance <= 0:
+            raise OptimizationError("容差必须是正的有限数")
+        # A single UI tolerance is applied consistently to all three
+        # termination criteria exposed by scipy.
+        solver_options.update({"ftol": tolerance, "xtol": tolerance, "gtol": tolerance})
+
+    def callback(_x, _state=None):
+        check_cancelled(options)
+
+    solver_options["callback"] = callback
+
     start = time.time()
     try:
         ls = least_squares(
@@ -69,6 +99,7 @@ def run_least_squares(
             x0,
             bounds=(lower, upper),
             method=method if method != "lm" else "trf",  # lm ignores bounds
+            **solver_options,
         )
     except Exception as exc:
         raise OptimizationError(f"least_squares 失败: {exc}") from exc

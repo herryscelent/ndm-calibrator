@@ -1,0 +1,21 @@
+{
+  "name": "first_order",
+  "model": "first_order",
+  "true_parameters": {
+    "K": 2.5,
+    "tau": 6.0
+  },
+  "noise_std": 0.02,
+  "seed": 101,
+  "recommended_algorithm": "least_squares",
+  "expected_range": {
+    "K": [
+      2.2,
+      2.8
+    ],
+    "tau": [
+      5.0,
+      7.0
+    ]
+  }
+}

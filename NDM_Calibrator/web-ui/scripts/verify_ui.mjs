@@ -3,14 +3,14 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
 const checks = [
-  ["dashboard", ["项目首页", "工作流程", "Measured vs Simulated", "Samples"]],
+  ["dashboard", ["项目首页", "工作流程", "实测值与模拟值", "样本数"]],
   ["data", ["数据管理", "字段映射", "数据预览", "position"]],
-  ["model", ["模型定义", "Model Structure", "方程编辑", "Model valid"]],
-  ["parameters", ["参数配置", "Parameter", "Status", "k", "c", "m"]],
-  ["identification", ["参数辨识", "算法选择", "Least Squares", "开始辨识"]],
+  ["model", ["模型定义", "模型结构", "方程编辑", "模型有效"]],
+  ["parameters", ["参数配置", "参数", "状态", "k", "c", "m"]],
+  ["identification", ["参数辨识", "算法选择", "最小二乘", "开始辨识"]],
   ["calibration", ["模型校准", "RMSE", "实测 vs 模拟", "参数结果"]],
-  ["diagnostics", ["诊断分析", "Residuals", "Sensitivity", "Identifiability"]],
-  ["uncertainty", ["可信度分析", "Multi-start", "Bootstrap"]],
+  ["diagnostics", ["诊断分析", "残差", "敏感度", "可辨识性"]],
+  ["uncertainty", ["可信度分析", "多起点分析", "Bootstrap"]],
   ["export", ["结果导出", "导出内容", "格式", "导出结果"]],
 ];
 

@@ -24,7 +24,7 @@
 | `border` | `#DDE3EA` | 边框 |
 | `border-strong` | `#C9D2DC` | 强边框 |
 | `text-primary` | `#20252B` | 主文本 |
-| `text-secondary` | `#687482` | 次要文本 |
+| `text-secondary` | `#5F6B78` | 次要文本 |
 | `text-muted` | `#929CAA` | 弱文本 |
 | `text-disabled` | `#B4BCC5` | 禁用 |
 | `accent` | `#356FE5` | 主强调色 |

@@ -26,7 +26,7 @@ import {
 } from "@/data/mock/diagnostics";
 import { cn } from "@/lib/utils";
 
-const barColors = ["#e6ebf1", "#e6ebf1", "#e6ebf1", "#e6ebf1", "#c9d2dc", "#356fe5"];
+const histogramColor = "#c9d2dc";
 
 export function DiagnosticsPage() {
   return (
@@ -35,23 +35,23 @@ export function DiagnosticsPage() {
 
       <Tabs defaultValue="residuals">
         <TabsList>
-          <TabsTrigger value="residuals">Residuals</TabsTrigger>
-          <TabsTrigger value="sensitivity">Sensitivity</TabsTrigger>
-          <TabsTrigger value="identifiability">Identifiability</TabsTrigger>
-          <TabsTrigger value="correlation">Correlation</TabsTrigger>
+          <TabsTrigger value="residuals">残差</TabsTrigger>
+          <TabsTrigger value="sensitivity">敏感度</TabsTrigger>
+          <TabsTrigger value="identifiability">可辨识性</TabsTrigger>
+          <TabsTrigger value="correlation">相关性</TabsTrigger>
         </TabsList>
 
         {/* ---------------- Residuals ---------------- */}
         <TabsContent value="residuals">
           <div className="mb-5 grid grid-cols-2 gap-3 xl:grid-cols-4">
-            <MetricCard label="Mean" value={residualSummary.mean.toFixed(4)} />
-            <MetricCard label="Std" value={residualSummary.std.toFixed(4)} />
-            <MetricCard label="Max Abs" value={residualSummary.maxAbs.toFixed(3)} />
-            <MetricCard label="ACF Peak" value={residualSummary.acfPeak.toFixed(3)} />
+            <MetricCard label="均值" value={residualSummary.mean.toFixed(4)} />
+            <MetricCard label="标准差" value={residualSummary.std.toFixed(4)} />
+            <MetricCard label="最大绝对值" value={residualSummary.maxAbs.toFixed(3)} />
+            <MetricCard label="ACF 峰值" value={residualSummary.acfPeak.toFixed(3)} />
           </div>
 
           <div className="rounded-lg border border-border bg-surface p-5">
-            <h3 className="mb-3 text-[15px] font-semibold text-text-primary">Residual vs Time</h3>
+            <h3 className="mb-3 text-[15px] font-semibold text-text-primary">残差时间序列</h3>
             <div className="h-[220px]">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={residuals} margin={{ top: 8, right: 12, bottom: 8, left: 0 }}>
@@ -59,14 +59,14 @@ export function DiagnosticsPage() {
                   <XAxis dataKey="t" tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} />
                   <YAxis tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} width={44} />
                   <Tooltip content={<ChartTooltip />} />
-                  <Line type="monotone" dataKey="residual" name="Residual" stroke={chartColors.residual} strokeWidth={1.5} dot={false} />
+                  <Line type="monotone" dataKey="residual" name="残差" stroke={chartColors.residual} strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           <div className="mt-5 rounded-lg border border-border bg-surface p-5">
-            <h3 className="mb-3 text-[15px] font-semibold text-text-primary">Residual Distribution</h3>
+            <h3 className="mb-3 text-[15px] font-semibold text-text-primary">残差分布</h3>
             <div className="h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={residualHistogram} margin={{ top: 8, right: 12, bottom: 8, left: 0 }}>
@@ -74,9 +74,9 @@ export function DiagnosticsPage() {
                   <XAxis dataKey="bin" tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} />
                   <YAxis tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} width={32} />
                   <Tooltip content={<ChartTooltip />} />
-                  <Bar dataKey="count" name="Count" radius={[3, 3, 0, 0]}>
+                  <Bar dataKey="count" name="频数" radius={[3, 3, 0, 0]}>
                     {residualHistogram.map((_, i) => (
-                      <Cell key={i} fill={barColors[i % barColors.length]} />
+                      <Cell key={i} fill={histogramColor} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -89,7 +89,7 @@ export function DiagnosticsPage() {
         <TabsContent value="sensitivity">
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
             <div className="rounded-lg border border-border bg-surface p-5">
-              <h3 className="mb-3 text-[15px] font-semibold text-text-primary">Normalized Sensitivity</h3>
+              <h3 className="mb-3 text-[15px] font-semibold text-text-primary">归一化敏感度</h3>
               <div className="h-[220px]">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
@@ -104,17 +104,17 @@ export function DiagnosticsPage() {
                     <XAxis type="number" tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} />
                     <YAxis type="category" dataKey="name" tick={{ fontSize: 13, fill: "#20252b" }} tickLine={false} axisLine={false} width={40} />
                     <Tooltip content={<ChartTooltip />} />
-                    <Bar dataKey="rms" name="RMS Sensitivity" fill={chartColors.sensitivity} radius={[0, 3, 3, 0]} barSize={22} />
+                    <Bar dataKey="rms" name="RMS 敏感度" fill={chartColors.sensitivity} radius={[0, 3, 3, 0]} barSize={22} />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-border">
-              <table className="w-full text-[13px]">
+            <div className="overflow-x-auto rounded-lg border border-border">
+              <table className="w-full min-w-[320px] text-[13px]">
                 <thead>
                   <tr className="border-b border-border bg-surface-secondary">
-                    {["Parameter", "Sensitivity", "Rank"].map((h) => (
+                    {["参数", "敏感度", "排名"].map((h) => (
                       <th key={h} className="px-4 py-2 text-left font-medium text-text-secondary">{h}</th>
                     ))}
                   </tr>
@@ -136,13 +136,13 @@ export function DiagnosticsPage() {
         {/* ---------------- Identifiability ---------------- */}
         <TabsContent value="identifiability">
           <div className="mb-5 grid grid-cols-3 gap-3">
-            <MetricCard label="Condition Number" value={identifiability.conditionNumber.toFixed(1)} />
-            <MetricCard label="Rank" value={`${identifiability.rank} / ${identifiability.rankTotal}`} sub="Good" />
-            <MetricCard label="Min Singular Value" value={identifiability.minSingularValue.toFixed(3)} />
+            <MetricCard label="条件数" value={identifiability.conditionNumber.toFixed(1)} />
+            <MetricCard label="秩" value={`${identifiability.rank} / ${identifiability.rankTotal}`} sub="良好" />
+            <MetricCard label="最小奇异值" value={identifiability.minSingularValue.toFixed(3)} />
           </div>
 
           <div className="rounded-lg border border-border bg-surface p-5">
-            <h3 className="mb-3 text-[15px] font-semibold text-text-primary">Singular Values</h3>
+            <h3 className="mb-3 text-[15px] font-semibold text-text-primary">奇异值</h3>
             <div className="h-[200px]">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -153,14 +153,14 @@ export function DiagnosticsPage() {
                   <XAxis dataKey="idx" tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} />
                   <YAxis tick={{ fontSize: 11, fill: "#929caa" }} tickLine={false} axisLine={{ stroke: "#dde3ea" }} width={44} />
                   <Tooltip content={<ChartTooltip />} />
-                  <Bar dataKey="value" name="Singular Value" fill={chartColors.measured} radius={[3, 3, 0, 0]} barSize={60} />
+                  <Bar dataKey="value" name="奇异值" fill={chartColors.measured} radius={[3, 3, 0, 0]} barSize={60} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           <div className="mt-4 flex items-start gap-2 rounded-[6px] border border-success/40 bg-success/5 px-3 py-2 text-[13px] text-success">
-            <Badge variant="success">Good</Badge>
+            <Badge variant="success">良好</Badge>
             <span>{identifiability.note}</span>
           </div>
         </TabsContent>
@@ -170,7 +170,7 @@ export function DiagnosticsPage() {
           <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
             <div className="rounded-lg border border-border bg-surface p-5">
               <h3 className="mb-4 text-[15px] font-semibold text-text-primary">
-                Parameter Correlation
+                参数相关性
               </h3>
               {/* CSS-grid heatmap (small matrix) */}
               <div className="inline-block">
@@ -208,7 +208,7 @@ export function DiagnosticsPage() {
 
             <div>
               <h3 className="mb-3 text-[15px] font-semibold text-text-primary">
-                Highest parameter correlation
+                最高参数相关性
               </h3>
               <div className="flex items-center gap-3 rounded-lg border border-border bg-surface px-4 py-3">
                 <span className="font-mono text-[13px] text-text-primary">

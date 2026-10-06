@@ -1,0 +1,16 @@
+{
+  "name": "exponential_decay",
+  "model": "exponential_decay",
+  "true_parameters": {
+    "k": 0.35
+  },
+  "noise_std": 0.02,
+  "seed": 100,
+  "recommended_algorithm": "least_squares",
+  "expected_range": {
+    "k": [
+      0.3,
+      0.4
+    ]
+  }
+}

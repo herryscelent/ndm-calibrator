@@ -40,6 +40,13 @@ class ObjectiveConfig:
             )
         if self.huber_delta <= 0:
             raise ObjectiveError("Huber delta 必须大于 0")
+        if self.weights is not None:
+            for name, value in self.weights.items():
+                value = float(value)
+                if not np.isfinite(value) or value < 0:
+                    raise ObjectiveError(f"输出 '{name}' 权重必须是非负有限数")
+            if self.weights and sum(float(v) for v in self.weights.values()) <= 0:
+                raise ObjectiveError("输出权重总和必须大于 0")
 
     def weight_for(self, output_name: str) -> float:
         if self.weights is None:
@@ -126,5 +133,10 @@ def aggregate_objectives(
     if not per_output:
         raise ObjectiveError("没有可聚合的输出目标值")
     weights = config.weights or {}
-    total = sum(weights.get(name, 1.0) for name in per_output)
-    return sum(per_output[name] * weights.get(name, 1.0) for name in per_output) / total
+    selected = {name: float(weights.get(name, 1.0)) for name in per_output}
+    if any((not np.isfinite(value) or value < 0) for value in selected.values()):
+        raise ObjectiveError("输出权重必须是非负有限数")
+    total = sum(selected.values())
+    if total <= 0:
+        raise ObjectiveError("输出权重总和必须大于 0")
+    return sum(per_output[name] * selected[name] for name in per_output) / total

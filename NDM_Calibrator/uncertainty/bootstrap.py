@@ -9,7 +9,7 @@ import numpy as np
 
 from app.constants import BOOTSTRAP_DEFAULT_B
 from core.exceptions import NDMCError
-from identification.base import build_context, bounds_and_initial
+from identification.base import build_context, bounds_and_initial, check_cancelled
 from identification.differential_evolution import run_differential_evolution
 from identification.least_squares import run_least_squares
 from identification.nelder_mead import run_nelder_mead
@@ -56,7 +56,7 @@ def run_bootstrap(project, options: Dict[str, Any]) -> Dict[str, Any]:
         )
     else:
         # Fall back to re-running the requested algorithm once.
-        result = _run_algo(project, algorithm, seed)
+        result = _run_algo(project, algorithm, seed, fit_options=options)
         theta_opt = np.array([result.parameters[n] for n in free_names], dtype=float)
 
     predicted = ctx.predict_outputs(theta_opt)
@@ -72,6 +72,7 @@ def run_bootstrap(project, options: Dict[str, Any]) -> Dict[str, Any]:
 
     start = time.time()
     for b in range(B):
+        check_cancelled(options)
         try:
             # 2-4. Bootstrap data and re-identify.
             boot_residuals = {
@@ -81,7 +82,13 @@ def run_bootstrap(project, options: Dict[str, Any]) -> Dict[str, Any]:
                 name: predicted[name] + boot_residuals[name] for name in residuals
             }
             boot_project = _make_boot_project(project, boot_measured)
-            result = _run_algo(boot_project, algorithm, seed=seed + b if seed is not None else None)
+            result = _run_algo(
+                boot_project,
+                algorithm,
+                seed=seed + b if seed is not None else None,
+                cancel_token=options.get("_cancel_token"),
+                fit_options=options,
+            )
             for i, name in enumerate(free_names):
                 samples[name].append(result.parameters[name])
             successes += 1
@@ -91,6 +98,7 @@ def run_bootstrap(project, options: Dict[str, Any]) -> Dict[str, Any]:
                 raise BootstrapError(
                     f"Bootstrap 失败过多 ({len(failures)}/{B}): {failures[0]}"
                 )
+        check_cancelled(options)
     runtime = time.time() - start
 
     if successes == 0:
@@ -157,7 +165,16 @@ def _make_boot_project(project, boot_measured: Dict[str, np.ndarray]):
     return new_project
 
 
-def _run_algo(project, algorithm: str, seed: Optional[int]):
+def _run_algo(project, algorithm: str, seed: Optional[int], cancel_token=None, fit_options: Dict[str, Any] | None = None):
     ctx = build_context(project)
     from identification.manager import run_algorithm
-    return run_algorithm(project, algorithm, {"seed": seed} if seed is not None else {})
+    run_options = {
+        key: value
+        for key, value in (fit_options or {}).items()
+        if key not in {"B", "algorithm"}
+    }
+    if seed is not None:
+        run_options["seed"] = seed
+    if cancel_token is not None:
+        run_options["_cancel_token"] = cancel_token
+    return run_algorithm(project, algorithm, run_options)

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "NDM-Calibrator-Qt-Mock"
+version = "1.0.1"
+description = "NDM Calibrator PySide6 high-fidelity mock frontend"
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6>=6.6",
+    "pyqtgraph>=0.13",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.4", "pytest-qt>=4.4"]
+
+[tool.setuptools]
+packages = ["ui", "ui.design", "ui_v2"]
+
+[tool.pytest.ini_options]
+testpaths = ["../tests"]
+addopts = "-q"

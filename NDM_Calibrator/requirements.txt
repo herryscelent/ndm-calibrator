@@ -11,3 +11,4 @@ pyqtgraph>=0.13,<1
 
 # Development / test
 pytest>=7.4,<9
+pytest-qt>=4.4,<5

@@ -10,7 +10,7 @@ import { parameters, type ParamStatus, type ParameterConfig } from "@/data/mock/
 function validateParam(p: ParameterConfig): string | null {
   if (p.status === "Fixed") return null;
   if (!(p.lower < p.initial && p.initial < p.upper)) {
-    return "Initial value must be between lower and upper bounds.";
+    return "初值必须位于下限和上限之间。";
   }
   return null;
 }
@@ -61,14 +61,14 @@ export function ParametersPage({ onToast }: { onToast: (msg: string) => void }) 
     <div>
       <PageHeader
         title="参数配置"
-        description="设置参数初值、搜索边界及固定状态。"
+        description="设置参数初值、搜索边界和参数状态。"
         actions={
           <Button
             variant="secondary"
             onClick={() => {
               if (allValid) {
                 setErrors({});
-                onToast("All parameter settings are valid");
+                onToast("参数配置有效");
               }
             }}
           >
@@ -79,8 +79,8 @@ export function ParametersPage({ onToast }: { onToast: (msg: string) => void }) 
 
       {/* Toolbar */}
       <div className="mb-3 flex items-center gap-2">
-        <Button variant="secondary" size="sm" onClick={() => onToast("Parameter added")}>
-          <Plus className="h-4 w-4" /> Add
+        <Button variant="secondary" size="sm" onClick={() => onToast("已添加参数")}>
+          <Plus className="h-4 w-4" /> 添加
         </Button>
         <Button
           variant="secondary"
@@ -88,20 +88,20 @@ export function ParametersPage({ onToast }: { onToast: (msg: string) => void }) 
           onClick={removeSelected}
           disabled={selected === null}
         >
-          <Trash2 className="h-4 w-4" /> Remove
+          <Trash2 className="h-4 w-4" /> 删除
         </Button>
         <Button variant="ghost" size="sm" onClick={resetAll}>
-          <RotateCcw className="h-4 w-4" /> Reset
+          <RotateCcw className="h-4 w-4" /> 重置
         </Button>
       </div>
 
       {/* Parameter table */}
-      <div className="overflow-hidden rounded-lg border border-border">
-        <table className="w-full text-[13px]">
+      <div className="overflow-x-auto rounded-lg border border-border">
+        <table className="w-full min-w-[680px] text-[13px]">
           <thead>
             <tr className="border-b border-border bg-surface-secondary">
               <th className="w-8 px-3 py-2" />
-              {["Parameter", "Initial", "Lower", "Upper", "Status", "Unit"].map((h) => (
+              {["参数", "初值", "下限", "上限", "状态", "单位"].map((h) => (
                 <th key={h} className="px-3 py-2 text-left font-medium text-text-secondary">
                   {h}
                 </th>
@@ -168,9 +168,9 @@ export function ParametersPage({ onToast }: { onToast: (msg: string) => void }) 
                     />
                   </td>
                   <td className="px-3 py-2">
-                    <button onClick={() => toggleStatus(i)} title="切换 Free / Fixed">
+                    <button onClick={() => toggleStatus(i)} title="切换待辨识 / 固定">
                       <Badge variant={isFixed ? "neutral" : "default"}>
-                        {isFixed ? "Fixed" : "Free"}
+                        {isFixed ? "固定" : "待辨识"}
                       </Badge>
                     </button>
                   </td>
@@ -194,7 +194,7 @@ export function ParametersPage({ onToast }: { onToast: (msg: string) => void }) 
         ) : (
           <div className="flex items-center gap-2 rounded-[6px] border border-success/40 bg-success/5 px-3 py-2 text-[13px] text-success">
             <CircleCheck className="h-4 w-4" />
-            <span>All parameter settings are valid</span>
+            <span>参数配置有效</span>
           </div>
         )}
       </div>
