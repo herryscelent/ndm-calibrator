@@ -1,5 +1,9 @@
 # NDM-Calibrator
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
+[![PySide6](https://img.shields.io/badge/GUI-PySide6-green.svg)](https://doc.qt.io/qtforpython/)
+
 **非线性动态模型参数辨识与校准软件**
 
 *Nonlinear Dynamic Model Parameter Identification & Calibration Tool*
@@ -161,8 +165,9 @@ Python 3.11+ · NumPy · SciPy · pandas · SymPy · Matplotlib · openpyxl · P
 
 ## 许可证
 
-**本仓库尚未添加开源许可证（License）。**
+本项目基于 [MIT License](LICENSE) 开源，Copyright (c) 2026 herryscelent。
 
-在添加许可证之前，代码默认保留全部权利。若你希望他人可以自由使用、修改与分发，
-建议补充一个明确的许可证文件，例如 [MIT](https://choosealicense.com/licenses/mit/)
-或 [Apache-2.0](https://choosealicense.com/licenses/apache-2.0/)。
+你可以自由地使用、复制、修改、合并、发布、分发、再授权及销售本软件，
+唯一要求是保留上述版权声明与许可声明。本软件按「原样」提供，不附带任何担保。
+
+> 简单说：随便用，包括商用和闭源项目，只要别删掉版权声明。

@@ -6,7 +6,18 @@ build-backend = "setuptools.build_meta"
 name = "NDM-Calibrator"
 version = "1.0.0"
 description = "非线性动态模型参数辨识与校准软件 (Nonlinear Dynamic Model parameter identification and calibration)"
+readme = "README.md"
 requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
